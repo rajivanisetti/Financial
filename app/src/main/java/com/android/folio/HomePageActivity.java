@@ -159,5 +159,4 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
             Log.e("oneyear", oneYear);
         }
     }
-
-    }
+}
