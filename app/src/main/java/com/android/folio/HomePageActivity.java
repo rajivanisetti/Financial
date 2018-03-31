@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HomePageActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,6 +56,9 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
             //Add ActionListeners
             findViewById(R.id.analyze_button).setOnClickListener(this);
             findViewById(R.id.buttonSignOut).setOnClickListener(this);
+
+            AsyncTaskRunner runner = new AsyncTaskRunner();
+            runner.execute();
         }
 
         //==============================================================================================
@@ -113,7 +119,7 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            
+
                             AlertDialog dialog =
                                     new AlertDialog.Builder(HomePageActivity.this)
                                             .setTitle("Sentiment: " + sentiment)
@@ -125,5 +131,33 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
                 }
             });
         }
+
+    static class AsyncTaskRunner extends AsyncTask <Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... params) {
+            APIReader apiReader = new APIReader();
+            String output = "";
+            try {
+                output = apiReader.readData("BLK~25|AAPL~25|IXN~25|MALOX~25", "USD", true);
+            }
+            catch (Exception e) {
+                Log.e("APIReader", e.toString());
+            }
+            return output;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Pattern pattern = Pattern.compile("\"oneYear\":[0-9]*[.][0-9]*");
+            Matcher matcher = pattern.matcher(result);
+            String oneYear = "";
+
+            if (matcher.find()) {
+                oneYear = matcher.group(0);
+            }
+
+            Log.e("oneyear", oneYear);
+        }
+    }
 
     }
