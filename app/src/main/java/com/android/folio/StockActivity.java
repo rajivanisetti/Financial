@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,6 +55,16 @@ public class StockActivity extends AppCompatActivity {
         };
 
         stockList.setAdapter(adapter);
+
+        stockList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                tickers.remove(position);
+                weights.remove(position);
+
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
