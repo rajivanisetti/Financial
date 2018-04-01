@@ -13,6 +13,17 @@
         android:layout_marginRight="15dp"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/title"
+            android:layout_marginTop="65dp"
+            android:textAlignment="center"
+            android:textSize="42sp"
+            android:textColor="@color/text"
+            android:textStyle="bold"
+            android:fontFamily="@font/abeezee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <de.codecrafters.tableview.TableView xmlns:table="http://schemas.android.com/apk/res-auto"
             android:id="@+id/tableView"
             android:layout_width="match_parent"
@@ -27,12 +38,13 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="81dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/abeezee"
             android:text="Based on an analysis of online sentiment and public opinion towards this stock, we've given it a FolioScore™ of:"
             android:textAlignment="center"
-            android:textSize="20sp"
-            android:textColor="@color/text" />
+            android:textColor="@color/text"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/score"
@@ -40,15 +52,16 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/text"
-            android:textSize="32sp"
+            android:textSize="45sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="scale 0-100"
             android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/abeezee"
+            android:text="(out of 100)"
             android:textAlignment="center"
             android:textColor="@color/text" />
 
@@ -61,9 +74,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:fontFamily="@font/abeezee"
             android:text="Recent News:"
-            android:textSize="18sp"
-            android:textColor="@color/text" />
+            android:textColor="@color/text"
+            android:textSize="25sp" />
 
         <ListView
             android:id="@+id/links"

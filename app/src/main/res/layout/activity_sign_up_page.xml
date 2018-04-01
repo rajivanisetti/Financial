@@ -46,40 +46,42 @@
                         android:id="@+id/editTextName"
                         android:layout_width="fill_parent"
                         android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:backgroundTint="@color/text"
                         android:drawableTint="#f5913f"
+                        android:fontFamily="@font/abril_fatface"
                         android:hint="@string/name"
                         android:inputType="textPersonName"
                         android:singleLine="true"
-                        android:backgroundTint="@color/text"
-                        android:textColorHint="@color/text"
-                        android:layout_margin="5dp"
-                        android:textColor="@color/text"/>
+                        android:textColor="@color/text"
+                        android:textColorHint="@color/text" />
 
                     <EditText
                         android:id="@+id/editTextEmail"
                         android:layout_width="fill_parent"
                         android:layout_height="40dp"
+                        android:layout_margin="5dp"
+                        android:backgroundTint="@color/text"
                         android:drawableTint="#f5913f"
+                        android:fontFamily="@font/abril_fatface"
                         android:hint="@string/email"
                         android:inputType="textEmailAddress"
                         android:singleLine="true"
-                        android:backgroundTint="@color/text"
-                        android:textColorHint="@color/text"
-                        android:layout_margin="5dp"
-                        android:textColor="@color/text" />
+                        android:textColor="@color/text"
+                        android:textColorHint="@color/text" />
 
                     <EditText
                         android:id="@+id/editTextPassword"
                         android:layout_width="fill_parent"
                         android:layout_height="40dp"
+                        android:layout_margin="5dp"
                         android:layout_marginTop="16dp"
+                        android:backgroundTint="@color/text"
+                        android:fontFamily="@font/abril_fatface"
                         android:hint="@string/password"
                         android:inputType="textPassword"
                         android:textColor="@color/text"
-                        android:backgroundTint="@color/text"
-                        android:textColorHint="@color/text"
-                        android:layout_margin="5dp"
-                        />
+                        android:textColorHint="@color/text" />
 
 
                     <Button
@@ -87,7 +89,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
-                        android:background="@color/BLACKS_black"
+                        android:background="@color/text"
+                        android:fontFamily="@font/abril_fatface"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:text="@string/sign_up"
@@ -101,9 +104,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/abril_fatface"
                         android:paddingTop="20dp"
                         android:text="@string/already_account"
-                        android:textColor="@color/text"/>
+                        android:textColor="@color/text" />
 
                 </LinearLayout>
 

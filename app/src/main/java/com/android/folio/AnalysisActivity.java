@@ -55,6 +55,7 @@ import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
+import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
@@ -82,6 +83,9 @@ public class AnalysisActivity extends AppCompatActivity {
         setContentView(R.layout.activity_analysis);
 
         String ticker = getIntent().getStringExtra("ticker");
+
+        TextView title = findViewById(R.id.title);
+        title.setText(ticker);
 
         FinanceAsyncTaskRunner financeRunner = new FinanceAsyncTaskRunner();
         financeRunner.execute(ticker);
@@ -174,6 +178,8 @@ public class AnalysisActivity extends AppCompatActivity {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
                     View view = super.getView(position, convertView, parent);
+                    view.setBackgroundColor(Color.LTGRAY);
+
                     TextView text1 = view.findViewById(android.R.id.text1);
 
                     text1.setText(articleNames.get(position));
@@ -381,6 +387,8 @@ public class AnalysisActivity extends AppCompatActivity {
 
                 String[] headers = {"Metric", "Statistic"};
                 tv.setHeaderAdapter(new SimpleTableHeaderAdapter(getBaseContext(), headers));
+                tv.setHeaderBackgroundColor(Color.GRAY);
+                tv.setDataRowBackgroundProvider(TableDataRowBackgroundProviders.alternatingRowColors(Color.LTGRAY, Color.LTGRAY));
             }
             catch(Exception e){
                 Log.e("number error", e.toString());

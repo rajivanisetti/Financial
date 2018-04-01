@@ -1,5 +1,6 @@
 package com.android.folio;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +43,7 @@ import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.model.TableColumnWeightModel;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
+import de.codecrafters.tableview.toolkit.TableDataRowBackgroundProviders;
 
 public class HomePageActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -83,6 +85,7 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
 
         ListView stockList = findViewById(R.id.stock_list);
 
+
         stockList.setOnTouchListener(new View.OnTouchListener() {
             // Setting on Touch Listener for handling the touch inside ScrollView
             @Override
@@ -97,6 +100,8 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
+
+                view.setBackgroundColor(Color.LTGRAY);
                 TextView text1 = view.findViewById(android.R.id.text1);
                 TextView text2 = view.findViewById(android.R.id.text2);
 
@@ -328,6 +333,8 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
 
                 String[] headers = {"Metric", "Statistic"};
                 tv.setHeaderAdapter(new SimpleTableHeaderAdapter(getBaseContext(), headers));
+                tv.setHeaderBackgroundColor(Color.GRAY);
+                tv.setDataRowBackgroundProvider(TableDataRowBackgroundProviders.alternatingRowColors(Color.LTGRAY, Color.LTGRAY));
             }
             catch(Exception e){
                 Log.e("number error", e.toString());

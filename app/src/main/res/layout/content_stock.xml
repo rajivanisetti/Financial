@@ -17,10 +17,11 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="0dp"
+        android:fontFamily="@font/abeezee"
         android:text="Please enter your desired stocks along with their weights in your portfolio:"
         android:textAlignment="center"
-        android:textSize="18sp"
-        android:textColor="@color/text"/>
+        android:textColor="@color/text"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:id="@+id/input_layout"
@@ -35,11 +36,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/text"
+            android:fontFamily="@font/abeezee"
             android:hint="Stock ticker symbol"
             android:inputType="textCapCharacters"
-            android:backgroundTint="@color/text"
-            android:textColorHint="@color/text"
-            />
+            android:textColorHint="@color/text" />
 
         <EditText
             android:id="@+id/stock_weight"
@@ -72,10 +73,11 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="18dp"
+        android:fontFamily="@font/abeezee"
         android:text="Please choose your risk tolerance"
         android:textAlignment="center"
-        android:textSize="14sp"
-        android:textColor="@color/text" />
+        android:textColor="@color/text"
+        android:textSize="14sp" />
 
     <SeekBar
         android:id="@+id/risk_slider"
@@ -90,10 +92,10 @@
         android:id="@+id/slider_min"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="no risk                                                high risk"
         android:layout_below="@id/risk_slider"
         android:layout_centerHorizontal="true"
-        />
+        android:fontFamily="@font/abeezee"
+        android:text="no risk                                                high risk" />
 
     <TextView
         android:id="@+id/slider_max"

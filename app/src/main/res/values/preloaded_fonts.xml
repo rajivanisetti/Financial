@@ -3,6 +3,7 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/abril_fatface</item>
         <item>@font/amaranth</item>
+        <item>@font/armata</item>
         <item>@font/bungee_inline</item>
         <item>@font/leckerli_one</item>
     </array>

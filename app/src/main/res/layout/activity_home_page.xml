@@ -11,6 +11,25 @@
         android:orientation="vertical"
         android:background="@color/background">
 
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="1dp"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:fontFamily="@font/leckerli_one"
+            android:inputType="textPersonName"
+            android:text="folio"
+            android:textAlignment="center"
+            android:textColor="@color/text"
+            android:textSize="30dp" />
+
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChart"
             android:layout_width="match_parent"
@@ -28,25 +47,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/BLACKS_lightGray"
+            android:background="@color/BLACKS_darkGray"
             android:orientation="vertical"
             android:padding="10dp"
-            android:layout_marginBottom="15dp">
+            android:layout_marginBottom="0dp">
 
             <TextView
+                android:id="@+id/stockheader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
                 android:text="Selected stocks:"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/BLACKS_black"/>
+                android:textColor="@color/BLACKS_black"
+                android:textSize="22sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <ListView
             android:id="@+id/stock_list"
             android:layout_width="wrap_content"
             android:layout_height="350dp"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="0dp"
+            />
 
         <Button
             android:id="@+id/buttonSignOut"
@@ -54,26 +76,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:text="Sign out"
-            android:background="@color/BLACKS_black"
+            android:background="@color/text"
             android:textColor="@color/background"/>
 
-        <EditText
-            android:id="@+id/editText2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="11dp"
-            android:clickable="false"
-            android:cursorVisible="false"
-            android:ems="10"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:inputType="textPersonName"
-            android:text="classy."
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="30dp" />
 
     </LinearLayout>
 
