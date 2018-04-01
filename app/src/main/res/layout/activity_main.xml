@@ -54,7 +54,7 @@
                 <EditText
                     android:id="@+id/editTextPassword"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_margin="5dp"
                     android:hint="@string/enter_password"
                     android:textColor="@color/text"
@@ -67,11 +67,11 @@
                     android:id="@+id/buttonSignIn"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="20dip"
+                    android:layout_marginTop="20dp"
                     android:text="@string/sign_in"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:textColor="#FFF"
+                    android:textColor="@color/background"
                     android:background="@color/BLACKS_black"
                     android:visibility="visible"
                     android:textStyle="bold" />

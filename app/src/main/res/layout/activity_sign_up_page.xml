@@ -92,7 +92,7 @@
                         android:paddingRight="10dp"
                         android:text="@string/sign_up"
                         android:textAllCaps="false"
-                        android:textColor="#FFF"
+                        android:textColor="@color/background"
                         android:textStyle="bold"
                         android:visibility="visible" />
 
