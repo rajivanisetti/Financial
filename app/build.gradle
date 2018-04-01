@@ -37,6 +37,9 @@ dependencies {
     implementation 'com.google.code.findbugs:jsr305:2.0.1'
     implementation 'commons-io:commons-io:2.5'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'de.codecrafters.tableview:tableview:2.8.0'
+    implementation 'org.twitter4j:twitter4j-core:4.0.6'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
