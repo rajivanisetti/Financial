@@ -40,9 +40,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private ProgressDialog progressDialog;
     private DatabaseReference db;
 
-    private ArrayList<String> tickers = new ArrayList<>();
-    private ArrayList<Integer> weights = new ArrayList<>();
-
     // APIs
     private FirebaseAuth mAuth;
 
@@ -68,29 +65,31 @@ public class MainActivity extends Activity implements View.OnClickListener{
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             final int bool = Integer.parseInt(dataSnapshot.getValue().toString());
+                            try {
+                                db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot ds) {
+                                        final ArrayList<String> tickers = new ArrayList<>();
+                                        final ArrayList<Integer> weights = new ArrayList<>();
 
-                            db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot ds) {
-                                    tickers = new ArrayList<>();
-                                    weights = new ArrayList<>();
+                                        for (DataSnapshot stocks : ds.getChildren()) {
+                                            tickers.add(stocks.getKey());
+                                            weights.add(Integer.parseInt(stocks.getValue().toString()));
+                                        }
 
-                                    for(DataSnapshot stocks : ds.getChildren()) {
-                                        tickers.add(stocks.getKey());
-                                        weights.add(Integer.parseInt(stocks.getValue().toString()));
+                                        final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
+                                        intent.putExtra("stockArray", tickers);
+                                        intent.putExtra("weightArray", weights);
+                                        updateUI(user, bool, intent);
                                     }
 
-                                    final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
-                                    intent.putExtra("stockArray", tickers);
-                                    intent.putExtra("weightArray", weights);
-
-                                    updateUI(user, bool,intent);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
-                            });
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                            } catch(Exception e) {
+                                Log.d("MAIN ACTIVITY", "Failure");
+                            }
                         }
 
                         @Override
@@ -122,6 +121,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         textViewForgotPassword.setOnClickListener(this);
 
     }
+
 
     //==============================================================================================
     // Helper Functions
@@ -160,29 +160,31 @@ public class MainActivity extends Activity implements View.OnClickListener{
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     final int bool = Integer.parseInt(dataSnapshot.getValue().toString());
+                                    try {
+                                        db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot ds) {
+                                                final ArrayList<String> tickers = new ArrayList<>();
+                                                final ArrayList<Integer> weights = new ArrayList<>();
 
-                                    db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot ds) {
-                                            final ArrayList<String> tickers = new ArrayList<>();
-                                            final ArrayList<Integer> weights = new ArrayList<>();
+                                                for (DataSnapshot stocks : ds.getChildren()) {
+                                                    tickers.add(stocks.getKey());
+                                                    weights.add(Integer.parseInt(stocks.getValue().toString()));
+                                                }
 
-                                            for(DataSnapshot stocks : ds.getChildren()) {
-                                                tickers.add(stocks.getKey());
-                                                weights.add(Integer.parseInt(stocks.getValue().toString()));
+                                                final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
+                                                intent.putExtra("stockArray", tickers);
+                                                intent.putExtra("weightArray", weights);
+                                                updateUI(user, bool, intent);
                                             }
 
-                                            final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
-                                            intent.putExtra("stockArray", tickers);
-                                            intent.putExtra("weightArray", weights);
-                                            updateUI(user, bool, intent);
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-                                        }
-                                    });
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+                                            }
+                                        });
+                                    } catch(Exception e) {
+                                        Log.d("MAIN ACTIVITY", "Failure");
+                                    }
                                 }
 
                                 @Override
