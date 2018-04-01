@@ -110,7 +110,7 @@ public class AnalysisActivity extends AppCompatActivity {
 
                         Elements words = newDoc.select("h1, h2, h3, h4, h5, h6");
                         String articleName = links.get(i).text();
-                        Log.e("URL", myUrl);
+                        Log.e("URL", newUrl);
                         Log.e("Article Name", articleName);
                         String s = "";
                         urls.add(myUrl);
