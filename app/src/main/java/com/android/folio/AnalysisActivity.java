@@ -61,23 +61,21 @@ public class AnalysisActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analysis);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        String ticker = getIntent().getStringExtra("ticker");
 
         AsyncTaskRunner runner = new AsyncTaskRunner();
-        runner.execute();
+        runner.execute(ticker);
 
        /* String body = myBodies.get(0);
         analyzeText(body); */
     }
 
-    String ticker = getIntent().getStringExtra("ticker");
-
-    private class AsyncTaskRunner extends AsyncTask<Void, Void, Void> {
+    private class AsyncTaskRunner extends AsyncTask<String, Void, Void> {
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(String... params) {
             try {
-                String myUrl = "https://www.google.com/search?q=" + ticker + "&tbm=nws";
+                String myUrl = "https://www.google.com/search?q=" + params[0] + "&tbm=nws";
                 org.jsoup.nodes.Document doc = Jsoup.connect(myUrl)
                         //.userAgent("Mozilla")
                         .ignoreHttpErrors(true)

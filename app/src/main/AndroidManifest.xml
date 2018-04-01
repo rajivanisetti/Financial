@@ -21,6 +21,8 @@
         <activity android:name=".SignUpPageActivity" />
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".HomePageActivity" />
+        <activity android:name=".AnalysisActivity" />
+
         <activity
             android:name=".StockActivity"
             android:label="@string/title_activity_stock"
