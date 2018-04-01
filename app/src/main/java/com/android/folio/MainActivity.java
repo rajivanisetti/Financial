@@ -59,43 +59,32 @@ public class MainActivity extends Activity implements View.OnClickListener{
             db.child("users").child(currUser.getUid()).child("isVirgin").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    final FirebaseUser user = mAuth.getCurrentUser();
-                    db.child("users").child(user.getUid()).child("isVirgin").addValueEventListener(new ValueEventListener() {
+                    try {
+                        final FirebaseUser user = mAuth.getCurrentUser();
+                        final int bool = Integer.parseInt(dataSnapshot.getValue().toString());
+                        db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot ds) {
+                                final ArrayList<String> tickers = new ArrayList<>();
+                                final ArrayList<Integer> weights = new ArrayList<>();
 
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            final int bool = Integer.parseInt(dataSnapshot.getValue().toString());
-                            try {
-                                db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot ds) {
-                                        final ArrayList<String> tickers = new ArrayList<>();
-                                        final ArrayList<Integer> weights = new ArrayList<>();
-
-                                        for (DataSnapshot stocks : ds.getChildren()) {
-                                            tickers.add(stocks.getKey());
-                                            weights.add(Integer.parseInt(stocks.getValue().toString()));
-                                        }
-
-                                        final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
-                                        intent.putExtra("stockArray", tickers);
-                                        intent.putExtra("weightArray", weights);
-                                        updateUI(user, bool, intent);
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                    }
-                                });
-                            } catch(Exception e) {
-                                Log.d("MAIN ACTIVITY", "Failure");
+                                for (DataSnapshot stocks : ds.getChildren()) {
+                                    tickers.add(stocks.getKey());
+                                    weights.add(Integer.parseInt(stocks.getValue().toString()));
+                                }
+                                final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
+                                intent.putExtra("stockArray", tickers);
+                                intent.putExtra("weightArray", weights);
+                                updateUI(user, bool, intent);
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                        }
-                    });
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+                    } catch(Exception e) {
+                        Log.d("MAIN ACTIVITY", "Failure");
+                    }
                 }
 
                 @Override

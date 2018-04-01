@@ -95,12 +95,6 @@ public class StockActivity extends AppCompatActivity {
 
                 adapter.notifyDataSetChanged();
 
-                db.child("users").child(user.getUid()).child("stocks")
-                        .child(stockName.getText().toString())
-                        .setValue(Integer.parseInt(stockWeight.getText().toString()));
-
-                db.child("users").child(user.getUid()).child("isVirgin").setValue(0);
-
                 stockName.setText("");
                 stockWeight.setText("");
             }
@@ -127,6 +121,11 @@ public class StockActivity extends AppCompatActivity {
                         String ticker = tickers.get(i);
                         String weight = weights.get(i).toString();
 
+                        db.child("users").child(user.getUid()).child("stocks")
+                                .child(tickers.get(i))
+                                .setValue(weights.get(i));
+
+                        db.child("users").child(user.getUid()).child("isVirgin").setValue(0);
                         s = s.concat(ticker);
                         s = s.concat("~");
                         s = s.concat(weight);
