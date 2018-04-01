@@ -24,18 +24,13 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.services.language.v1beta2.CloudNaturalLanguage;
-import com.google.api.services.language.v1beta2.CloudNaturalLanguageRequestInitializer;
-import com.google.api.services.language.v1beta2.model.AnnotateTextRequest;
-import com.google.api.services.language.v1beta2.model.AnnotateTextResponse;
-import com.google.api.services.language.v1beta2.model.Document;
-import com.google.api.services.language.v1beta2.model.Features;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.io.IOException;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -53,7 +48,7 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
         // Declare Variables
         //==============================================================================================
         private FirebaseAuth mAuth;
-        private String CLOUD_API_KEY = "AIzaSyBP_3jPRzVum-DnQqie68laZ3dWGgNaHow";
+        private DatabaseReference db;
 
         ArrayList<String> tickers;
         ArrayList<Integer> weights;
@@ -68,6 +63,8 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
 
             // Check if User is Authenticated
             mAuth = FirebaseAuth.getInstance();
+            db = FirebaseDatabase.getInstance().getReference();
+
             if(mAuth.getCurrentUser() == null) {
                 finish();
                 startActivity(new Intent(this, MainActivity.class));
@@ -79,6 +76,7 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
             // Layout Setup
             setContentView(R.layout.activity_home_page);
             initChart();
+
             //Add ActionListeners
             findViewById(R.id.buttonSignOut).setOnClickListener(this);
 
@@ -144,20 +142,38 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
         }
 
         public void initChart() {
-            List<PieEntry> pieEntries = new ArrayList<>();
-            for (int i = 0; i < tickers.size(); i++) {
-                pieEntries.add(new PieEntry(weights.get(i), tickers.get(i)));
-            }
+            final FirebaseUser user = mAuth.getCurrentUser();
 
-            PieDataSet dataSet = new PieDataSet(pieEntries, "Selected tickers");
-            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-            PieData data = new PieData(dataSet);
+            db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
 
-            // Get the chart;
-            PieChart chart = (PieChart) findViewById(R.id.pieChart);
-            chart.setData(data);
-            chart.animateY(3000, Easing.EasingOption.EaseOutBack);
-            chart.invalidate();
+                        List<PieEntry> pieEntries = new ArrayList<>();
+
+                        for(DataSnapshot stocks : dataSnapshot.getChildren()) {
+                            pieEntries.add(new PieEntry(Integer.parseInt(stocks.getValue().toString()), stocks.getKey().toString()));
+                        }
+
+                        PieDataSet dataSet = new PieDataSet(pieEntries, "Allocations");
+                        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                        PieData data = new PieData(dataSet);
+
+                        // Get the chart;
+                        PieChart chart = (PieChart) findViewById(R.id.pieChart);
+                        chart.setData(data);
+                        chart.animateY(3000, Easing.EasingOption.EaseOutBack);
+                        chart.invalidate();
+                    } else {
+                        System.out.println("USER HAS NO STOCKS");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("PULLING STOCKS FAILED");
+                }
+            });
         }
 
     class AsyncTaskRunner extends AsyncTask <String, Void, String> {

@@ -19,6 +19,7 @@ public class User {
     //==============================================================================================
     private String name;
     private String email;
+    private Boolean isVirgin;
 
     //==============================================================================================
     // Constructors
@@ -27,9 +28,10 @@ public class User {
         // Required empty constructor for Firebase
     }
 
-    public User(String name, String email, String uid) {
+    public User(String name, String email) {
         this.name = name;
         this.email = email;
+        this.isVirgin = true;
     }
 
     //==============================================================================================
@@ -39,11 +41,15 @@ public class User {
 
     public String getEmail() {return this.email; }
 
+    public Boolean getIsVirgin() {return  this.isVirgin;}
+
     //==============================================================================================
     // Setter Methods
     //==============================================================================================
     public void setName(String name) { this.name = name; }
 
     public void setEmail(String email) { this.email = email; }
+
+    public void setIsVirgin(Boolean bool) {this.isVirgin = bool;}
 
 }
