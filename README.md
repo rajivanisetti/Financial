@@ -23,7 +23,7 @@ fol.io provides financial analysis and advice based on the stocks you want to in
 * [Open Source Initiative - JSoup](https://jsoup.org/)
 * [ISchwarz23 - SortableTableView](https://github.com/ISchwarz23/SortableTableView)
 
-![alt text](http://architecture.png)
+![alt text](https://github.com/rajivanisetti/folio/architecture.png)
 
 ## Screenshots
 // TODO
