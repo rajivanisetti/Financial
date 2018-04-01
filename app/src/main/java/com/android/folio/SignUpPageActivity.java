@@ -55,8 +55,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static android.content.ContentValues.TAG;
 
@@ -86,27 +89,26 @@ public class SignUpPageActivity extends AppCompatActivity implements View.OnClic
 
         // Check if User is Authenticated
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currUser = mAuth.getCurrentUser();
-        updateUI(currUser);
+        final FirebaseUser currUser = mAuth.getCurrentUser();
+        db = FirebaseDatabase.getInstance().getReference();
+
+        if(currUser != null) {
+            db.child("users").child(currUser.getUid()).child("isVirgin").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    updateUI(currUser, Integer.parseInt(dataSnapshot.getValue().toString()));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    updateUI(null, 1);
+                }
+            });
+        }
 
         setContentView(R.layout.activity_sign_up_page);
 
         initListeners();
-
-        db = FirebaseDatabase.getInstance().getReference();
-    }
-
-    //==============================================================================================
-    // On Start setup
-    //==============================================================================================
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-
     }
 
     //==============================================================================================
@@ -128,15 +130,17 @@ public class SignUpPageActivity extends AppCompatActivity implements View.OnClic
     //==============================================================================================
     // Helper Functions
     //==============================================================================================
-    private void updateUI(FirebaseUser currentUser) {
+
+    private void updateUI(FirebaseUser currentUser, int isVirgin) {
 
         if (currentUser != null) {
             finish();
-            startActivity(new Intent(this, StockActivity.class));
-        } else {
-            Log.d(TAG, "current user is null");
+            if(isVirgin == 1) {
+                startActivity(new Intent(this, StockActivity.class));
+            } else {
+                startActivity(new Intent(this, HomePageActivity.class));
+            }
         }
-
     }
 
     private void initListeners() {
@@ -214,21 +218,20 @@ public class SignUpPageActivity extends AppCompatActivity implements View.OnClic
                             saveUserData(name, email, uid);
 
                             // Sign in success, update UI with the signed in User's Information
-                            updateUI(currUser);
+                            updateUI(currUser, 1);
 
                         } else {
 
                             Toast.makeText(SignUpPageActivity.this, "Authentication failed." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            updateUI(null, 1);
                         }
                     }
                 });
     }
 
     private void saveUserData(String name, String email, String uid) {
-        User user = new User(name, email, uid);
-        System.out.println("clicked: " + user.getName());
+        User user = new User(name, email);
         db.child("users").child(uid).setValue(user);
     }
 }

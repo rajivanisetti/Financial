@@ -41,7 +41,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="20sp"
                         android:layout_marginTop="20sp"
-                        android:src="@mipmap/ic_launcher" />
+                        android:src="@mipmap/ic_launcher_round"/>
 
                         <EditText
                             android:id="@+id/editTextName"
@@ -76,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
-                        android:background="@color/colorAccent"
+                        android:background="@color/BLACKS_black"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:text="@string/sign_up"
