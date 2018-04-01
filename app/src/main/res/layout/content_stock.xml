@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".StockActivity"
-    tools:showIn="@layout/activity_stock">
+    tools:showIn="@layout/activity_stock"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/instructions"
@@ -15,10 +16,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="0dp"
         android:text="Please enter your desired stocks along with their weights in your portfolio:"
         android:textAlignment="center"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textColor="@color/text"/>
 
     <LinearLayout
         android:id="@+id/input_layout"
@@ -34,23 +36,30 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Stock ticker symbol"
-            android:inputType="textCapCharacters" />
+            android:inputType="textCapCharacters"
+            android:backgroundTint="@color/text"
+            android:textColorHint="@color/text"
+            />
 
         <EditText
             android:id="@+id/stock_weight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Stock weight (%)"
-            android:inputType="number" />
+            android:hint="Weight (%)"
+            android:inputType="number"
+            android:backgroundTint="@color/text"
+            android:textColorHint="@color/text" />
 
         <Button
             android:id="@+id/add_button"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
             android:text="Add"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:background="@color/BLACKS_black"
+            android:textColor="@color/background" />
 
     </LinearLayout>
 
@@ -63,9 +72,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="18dp"
-        android:text="Please choose your risk tolerance (0 = no risk, 100 = most risk)"
+        android:text="Please choose your risk tolerance"
         android:textAlignment="center"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:textColor="@color/text" />
 
     <SeekBar
         android:id="@+id/risk_slider"
@@ -76,20 +86,40 @@
         android:layout_marginRight="64dp"
         android:layout_marginTop="16dp" />
 
+    <TextView
+        android:id="@+id/slider_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="no risk                                                high risk"
+        android:layout_below="@id/risk_slider"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:id="@+id/slider_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_below="@id/risk_slider"
+        android:layout_toEndOf="@id/slider_min"
+        android:layout_centerHorizontal="true" />
+
     <Button
         android:id="@+id/done_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/risk_slider"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="Done" />
+        android:layout_alignEnd="@+id/instructions"
+        android:layout_below="@+id/stock_list"
+        android:background="@color/BLACKS_black"
+        android:text="Analyze"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/background" />
 
     <ListView
         android:id="@+id/stock_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/done_button"
+        android:layout_height="250dp"
+        android:layout_below="@id/risk_slider"
         android:layout_marginTop="16dp" />
 
 </RelativeLayout>
