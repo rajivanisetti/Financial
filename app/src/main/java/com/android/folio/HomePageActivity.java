@@ -8,8 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -43,6 +48,9 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
         private FirebaseAuth mAuth;
         private String CLOUD_API_KEY = "AIzaSyBP_3jPRzVum-DnQqie68laZ3dWGgNaHow";
 
+        ArrayList<String> tickers;
+        ArrayList<Integer> weights;
+
         //==============================================================================================
         // On Create Setup
         //==============================================================================================
@@ -58,14 +66,49 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(new Intent(this, MainActivity.class));
             }
 
+            tickers = getIntent().getStringArrayListExtra("stockArray");
+            weights = getIntent().getIntegerArrayListExtra("weightArray");
+
             // Layout Setup
             setContentView(R.layout.activity_home_page);
             initChart();
             //Add ActionListeners
             findViewById(R.id.buttonSignOut).setOnClickListener(this);
 
+            ListView stockList = findViewById(R.id.stock_list);
+
+            final ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, android.R.id.text1, tickers) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+                    TextView text1 = view.findViewById(android.R.id.text1);
+                    TextView text2 = view.findViewById(android.R.id.text2);
+
+                    text1.setText(tickers.get(position));
+                    text2.setText("Weight: " + weights.get(position).toString() + "%");
+                    return view;
+                }
+            };
+
+            stockList.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+            stockList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String ticker = adapter.getItem(position).toString();
+
+                    Intent intent = new Intent(getBaseContext(), AnalysisActivity.class);
+                    intent.putExtra("ticker", ticker);
+                    intent.putExtra("risk", getIntent().getIntExtra("riskRating", 0));
+                    startActivity(intent);
+                }
+            });
+
+            String param = getIntent().getStringExtra("parameterString");
+
             AsyncTaskRunner runner = new AsyncTaskRunner();
-            runner.execute();
+            runner.execute(param);
         }
 
         //==============================================================================================
@@ -84,15 +127,12 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
         }
 
         public void initChart() {
-            float rainfall[] = {98.8f, 123.8f, 162.6f, 24.3f};
-            String monthName[] = {"Jan", "Feb", "Mar", "Apr"};
-
             List<PieEntry> pieEntries = new ArrayList<>();
-            for (int i = 0; i < rainfall.length; i++) {
-                pieEntries.add(new PieEntry(rainfall[i], monthName[i]));
+            for (int i = 0; i < tickers.size(); i++) {
+                pieEntries.add(new PieEntry(weights.get(i), tickers.get(i)));
             }
 
-            PieDataSet dataSet = new PieDataSet(pieEntries, "Rainfall for Vancouver");
+            PieDataSet dataSet = new PieDataSet(pieEntries, "Selected tickers");
             dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
             PieData data = new PieData(dataSet);
 
@@ -103,13 +143,13 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
             chart.invalidate();
         }
 
-    static class AsyncTaskRunner extends AsyncTask <Void, Void, String> {
+    static class AsyncTaskRunner extends AsyncTask <String, Void, String> {
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(String... params) {
             APIReader apiReader = new APIReader();
             String output = "";
             try {
-                output = apiReader.readData("BLK~25|AAPL~25|IXN~25|MALOX~25", "USD", true);
+                output = apiReader.readData(params[0], "USD", true);
             }
             catch (Exception e) {
                 Log.e("APIReader", e.toString());

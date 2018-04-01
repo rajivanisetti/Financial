@@ -71,7 +71,7 @@ public class AnalysisActivity extends AppCompatActivity {
         analyzeText(body); */
     }
 
-    String ticker = "FB";
+    String ticker = getIntent().getStringExtra("ticker");
 
     private class AsyncTaskRunner extends AsyncTask<Void, Void, Void> {
         @Override
