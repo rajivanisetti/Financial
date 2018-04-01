@@ -57,10 +57,10 @@
             android:layout_width="60dp"
             android:layout_height="40dp"
             android:layout_marginLeft="20dp"
+            android:background="@color/text"
             android:text="Add"
-            android:textSize="12sp"
-            android:background="@color/BLACKS_black"
-            android:textColor="@color/background" />
+            android:textColor="@color/background"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -110,12 +110,13 @@
         android:id="@+id/done_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/instructions"
         android:layout_below="@+id/stock_list"
-        android:background="@color/BLACKS_black"
-        android:text="Analyze"
         android:layout_marginTop="10dp"
-        android:textColor="@color/background" />
+        android:background="@color/text"
+        android:text="Analyze"
+        android:layout_centerInParent="true"
+        android:textColor="@color/background"
+        />
 
     <ListView
         android:id="@+id/stock_list"
