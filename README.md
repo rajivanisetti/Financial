@@ -1,3 +1,5 @@
+## Created at LA Hacks 2018
+
 # fol.io
 
 Many are afraid to begin investing or just don't know where to start. fol.io takes away that fear by providing real time advice and data on stocks.
