@@ -52,7 +52,8 @@
                         android:singleLine="true"
                         android:backgroundTint="@color/text"
                         android:textColorHint="@color/text"
-                        android:layout_margin="5dp" />
+                        android:layout_margin="5dp"
+                        android:textColor="@color/text"/>
 
                     <EditText
                         android:id="@+id/editTextEmail"
@@ -64,7 +65,8 @@
                         android:singleLine="true"
                         android:backgroundTint="@color/text"
                         android:textColorHint="@color/text"
-                        android:layout_margin="5dp" />
+                        android:layout_margin="5dp"
+                        android:textColor="@color/text" />
 
                     <EditText
                         android:id="@+id/editTextPassword"
@@ -73,10 +75,11 @@
                         android:layout_marginTop="16dp"
                         android:hint="@string/password"
                         android:inputType="textPassword"
-                        android:textColor="#FFF"
+                        android:textColor="@color/text"
                         android:backgroundTint="@color/text"
                         android:textColorHint="@color/text"
-                        android:layout_margin="5dp" />
+                        android:layout_margin="5dp"
+                        />
 
 
                     <Button
