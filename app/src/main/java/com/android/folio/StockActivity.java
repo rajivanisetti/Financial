@@ -76,9 +76,20 @@ public class StockActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int riskRating = risk.getProgress();
 
-                // TODO: PASS RATING TO NEXT ACTIVITY
-                Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
-                startActivity(intent);
+                int weightSum = 0;
+
+                for (int i : weights) {
+                    weightSum += i;
+                }
+
+                if (weightSum != 100) {
+                    Snackbar.make(findViewById(R.id.stock_list), "Weights do not add up to 100.", Snackbar.LENGTH_LONG).show();
+                }
+                else {
+                    // TODO: PASS RATING TO NEXT ACTIVITY
+                    Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
