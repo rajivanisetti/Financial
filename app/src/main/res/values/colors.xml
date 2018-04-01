@@ -8,8 +8,8 @@
     <color name="BLACKS_white">#FFF</color>
     <color name="BLACKS_lightslategrey">#778899</color>
 
-    <color name="background">#510000</color>
-    <color name="text">#5B5A62</color>
+    <color name="background">#800030</color>
+    <color name="text">#a9a9a9</color>
 
 
 </resources>
