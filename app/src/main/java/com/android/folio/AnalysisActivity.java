@@ -64,6 +64,8 @@ public class AnalysisActivity extends AppCompatActivity {
     int read = 0;
     private String CLOUD_API_KEY = "AIzaSyBP_3jPRzVum-DnQqie68laZ3dWGgNaHow";
     ArrayList<String> myBodies = new ArrayList<String>();
+    ArrayList<String> articleNames = new ArrayList<String>();
+    ArrayList<String> urls = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,19 +104,23 @@ public class AnalysisActivity extends AppCompatActivity {
                 for (int i = 0; i < n; i++) {
                     //Log.e("I", "I: " + Integer.toString(i));
                     String newUrl = links.get(i).select("a[href]").attr("abs:href");
-                    Log.e("link", newUrl);
                     try {
                         org.jsoup.nodes.Document newDoc = Jsoup.connect(newUrl).userAgent("Mozilla").ignoreHttpErrors(true).get();
 
 
                         Elements words = newDoc.select("h1, h2, h3, h4, h5, h6");
+                        String articleName = links.get(i).text();
+                        Log.e("URL", myUrl);
+                        Log.e("Article Name", articleName);
                         String s = "";
+                        urls.add(myUrl);
+                        articleNames.add(articleName);
+
 
 
                         for (Element e : words) {
                             // myBodies.add(i, e.text());
                             s = s.concat(e.text());
-
                         }
 
 
@@ -290,13 +296,21 @@ public class AnalysisActivity extends AppCompatActivity {
                 tenYearRisk = matcher.group(0).replaceAll("[^\\d.]", "");
             }
 
+            oneYear = (oneYear.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYear));
+            threeYear = (threeYear.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYear));
+            tenYear = (tenYear.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYear));
+            oneYearRisk = (oneYearRisk.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYearRisk));
+            threeYearRisk = (threeYearRisk.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYearRisk));
+            tenYearRisk = (tenYearRisk.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYearRisk));
+
             try {
-                String[][] data = {{"One Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYear))},
-                        {"Three Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYear))},
-                        {"Ten Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYear))},
-                        {"One Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYearRisk))},
-                        {"Three Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYearRisk))},
-                        {"Ten Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYearRisk))}};
+                String[][] data = {
+                        {"One Year Performance", oneYear},
+                        {"Three Year Performance", threeYear},
+                        {"Ten Year Performance", tenYear},
+                        {"One Year Risk", oneYearRisk},
+                        {"Three Year Risk", threeYearRisk},
+                        {"Ten Year Risk", tenYearRisk}};
 
                 TableView tv = findViewById(R.id.tableView);
                 SimpleTableDataAdapter adapter = new SimpleTableDataAdapter(getBaseContext(), data);

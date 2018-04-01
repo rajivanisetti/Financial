@@ -260,13 +260,61 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
                 tenYearRisk = matcher.group(0).replaceAll("[^\\d.]", "");
             }
 
+            pattern = Pattern.compile("\"sixMonth\":[0-9]*[.][0-9]*");
+            matcher = pattern.matcher(result);
+            String sixMonth = "";
+
+            if (matcher.find()) {
+                sixMonth = matcher.group(0).replaceAll("[^\\d.]", "");
+            }
+
+            pattern = Pattern.compile("\"sixMonthRisk\":[0-9]*[.][0-9]*");
+            matcher = pattern.matcher(result);
+            String sixMonthRisk = "";
+
+            if (matcher.find()) {
+                sixMonthRisk = matcher.group(0).replaceAll("[^\\d.]", "");
+            }
+
+            pattern = Pattern.compile("\"threeMonthRisk\":[0-9]*[.][0-9]*");
+            matcher = pattern.matcher(result);
+            String threeMonthRisk = "";
+
+            if (matcher.find()) {
+                threeMonthRisk = matcher.group(0).replaceAll("[^\\d.]", "");
+            }
+
+            pattern = Pattern.compile("\"threeMonth\":[0-9]*[.][0-9]*");
+            matcher = pattern.matcher(result);
+            String threeMonth = "";
+
+            if (matcher.find()) {
+                threeMonth = matcher.group(0).replaceAll("[^\\d.]", "");
+            }
+
+            threeMonth = (threeMonth.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(threeMonth));
+            threeMonthRisk = (threeMonthRisk.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(threeMonthRisk));
+            sixMonth = (sixMonth.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(sixMonth));
+            sixMonthRisk = (sixMonthRisk.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(sixMonthRisk));
+            oneYear = (oneYear.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYear));
+            threeYear = (threeYear.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYear));
+            tenYear = (tenYear.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYear));
+            oneYearRisk = (oneYearRisk.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYearRisk));
+            threeYearRisk = (threeYearRisk.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYearRisk));
+            tenYearRisk = (tenYearRisk.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYearRisk));
+
             try {
-                String[][] data = {{"One Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYear))},
-                        {"Three Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYear))},
-                        {"Ten Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYear))},
-                        {"One Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYearRisk))},
-                        {"Three Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYearRisk))},
-                        {"Ten Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYearRisk))}};
+                String[][] data = {
+                        {"Three Month Performance", threeMonth},
+                        {"Six Month Performance", sixMonth},
+                        {"One Year Performance", oneYear},
+                        {"Three Year Performance", threeYear},
+                        {"Ten Year Performance", tenYear},
+                        {"Three Month Risk", threeMonthRisk},
+                        {"Six Month Risk", sixMonthRisk},
+                        {"One Year Risk", oneYearRisk},
+                        {"Three Year Risk", threeYearRisk},
+                        {"Ten Year Risk", tenYearRisk}};
 
                 TableView tv = findViewById(R.id.tableView);
                 SimpleTableDataAdapter adapter = new SimpleTableDataAdapter(getBaseContext(), data);
