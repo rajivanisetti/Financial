@@ -22,11 +22,8 @@
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".HomePageActivity" />
         <activity android:name=".AnalysisActivity" />
+        <activity android:name=".StockActivity" />
 
-        <activity
-            android:name=".StockActivity"
-            android:label="@string/title_activity_stock"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
