@@ -38,22 +38,23 @@ import com.google.api.services.language.v1beta2.model.AnnotateTextResponse;
 import com.google.api.services.language.v1beta2.model.Document;
 import com.google.api.services.language.v1beta2.model.Features;
 
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.services.language.v1beta2.CloudNaturalLanguage;
-import com.google.api.services.language.v1beta2.CloudNaturalLanguageRequestInitializer;
-import com.google.api.services.language.v1beta2.model.AnnotateTextRequest;
-import com.google.api.services.language.v1beta2.model.AnnotateTextResponse;
-import com.google.api.services.language.v1beta2.model.Document;
-import com.google.api.services.language.v1beta2.model.Features;
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.ConfigurationBuilder;
+
 
 public class AnalysisActivity extends AppCompatActivity {
 
+    float TwitterSentiment = 0;
     float totalSentiment = 0;
+    float aveTwitterSentiment;
+    float sentAve;
+    int read = 0;
     private String CLOUD_API_KEY = "AIzaSyBP_3jPRzVum-DnQqie68laZ3dWGgNaHow";
     ArrayList<String> myBodies = new ArrayList<String>();
 
@@ -66,6 +67,10 @@ public class AnalysisActivity extends AppCompatActivity {
 
         AsyncTaskRunner runner = new AsyncTaskRunner();
         runner.execute(ticker);
+
+        /*
+        TwitterAsyncTaskRunner runner = new TwitterAsyncTaskRunner();
+        runner.execute(ticker);  */
 
        /* String body = myBodies.get(0);
         analyzeText(body); */
@@ -93,14 +98,13 @@ public class AnalysisActivity extends AppCompatActivity {
                         org.jsoup.nodes.Document newDoc = Jsoup.connect(newUrl).userAgent("Mozilla").ignoreHttpErrors(true).get();
 
 
-                         Elements words = newDoc.select("h1, h2, h3, h4, h5, h6");
-                         String s = "";
+                        Elements words = newDoc.select("h1, h2, h3, h4, h5, h6");
+                        String s = "";
 
 
-
-                         for (Element e : words) {
-                             // myBodies.add(i, e.text());
-                         s = s.concat(e.text());
+                        for (Element e : words) {
+                            // myBodies.add(i, e.text());
+                            s = s.concat(e.text());
 
                         }
 
@@ -111,9 +115,7 @@ public class AnalysisActivity extends AppCompatActivity {
 
                         myBodies.add(s);
 
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         Log.e("Error", "Could not read");
                         n++;
                         continue;
@@ -122,14 +124,11 @@ public class AnalysisActivity extends AppCompatActivity {
 
                 // At this point, MyBodies array has the words of each if the first 5 files //
 
-            }
-
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 Log.e("Main", e.toString());
             }
 
-            float sentAve = totalSentiment / 5;
+            sentAve = totalSentiment / 5;
             Log.e("SentAve", Float.toString(sentAve));
 
             return null;
@@ -166,9 +165,53 @@ public class AnalysisActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        final float sentiment =response.getDocumentSentiment().getScore();
+        final float sentiment = response.getDocumentSentiment().getScore();
         Log.e("sentiment", Float.toString(sentiment));
 
         return sentiment;
     }
+
+    private class TwitterAsyncTaskRunner extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+
+            ConfigurationBuilder cb = new ConfigurationBuilder();
+            cb.setDebugEnabled(true)
+                    .setOAuthConsumerKey("g7J7jzLDurNcL6TpnknpOnWWe")
+                    .setOAuthConsumerSecret("oNXW42pdmjSGDKHjgqobugYJagbasDG6V6t7YSbbhnNwB2eV2N")
+                    .setOAuthAccessToken("754432628-akRhGJsVcdqe8E5u4DwwOi3TswL65tLfe4JG2Vxo")
+                    .setOAuthAccessTokenSecret("bzP8wdUUkKHLBXTZ9RdWurimCvy8LNu5aq0TzmdaCfwsO");
+
+            TwitterFactory tf = new TwitterFactory(cb.build());
+            Twitter twitter = tf.getInstance();
+
+            Query query = new Query(params[0]);
+
+            try {
+                QueryResult result = twitter.search(query);
+                int i = 0;
+                for (twitter4j.Status status : result.getTweets()) {
+                    Log.e("Twitter", "Tweet: " + status.getText());
+                    read++;
+                    i++;
+                    TwitterSentiment += analyzeText(status.getText());
+                    if (i == 50) {
+                        aveTwitterSentiment =  (TwitterSentiment / read);
+                        break;
+                    }
+                }
+            } catch (TwitterException exc) {
+                Log.e("Error", exc.toString());
+
+            }
+
+            aveTwitterSentiment = (TwitterSentiment / read);
+            Log.e("Twitter Sent", Float.toString(aveTwitterSentiment));
+
+
+            return null;
+        }
+    }
 }
+
+
