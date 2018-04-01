@@ -19,7 +19,7 @@ public class User {
     //==============================================================================================
     private String name;
     private String email;
-    private Boolean isVirgin;
+    private int isVirgin;
 
     //==============================================================================================
     // Constructors
@@ -31,7 +31,7 @@ public class User {
     public User(String name, String email) {
         this.name = name;
         this.email = email;
-        this.isVirgin = true;
+        this.isVirgin = 1;
     }
 
     //==============================================================================================
@@ -41,7 +41,7 @@ public class User {
 
     public String getEmail() {return this.email; }
 
-    public Boolean getIsVirgin() {return  this.isVirgin;}
+    public int getIsVirgin() {return  this.isVirgin;}
 
     //==============================================================================================
     // Setter Methods
@@ -50,6 +50,6 @@ public class User {
 
     public void setEmail(String email) { this.email = email; }
 
-    public void setIsVirgin(Boolean bool) {this.isVirgin = bool;}
+    public void setIsVirgin(int bool) {this.isVirgin = bool;}
 
 }

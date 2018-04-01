@@ -96,7 +96,11 @@ public class SignUpPageActivity extends AppCompatActivity implements View.OnClic
             db.child("users").child(currUser.getUid()).child("isVirgin").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    updateUI(currUser, Integer.parseInt(dataSnapshot.getValue().toString()));
+                    try {
+                        updateUI(currUser, Integer.parseInt(dataSnapshot.getValue().toString()));
+                    } catch(Exception e) {
+                        Log.d("SIGN UP ERR", e.toString());
+                    }
                 }
 
                 @Override
