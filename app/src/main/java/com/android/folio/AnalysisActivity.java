@@ -69,7 +69,7 @@ public class AnalysisActivity extends AppCompatActivity {
         runner.execute(ticker);
 
 
-        TwitterAsyncTaskRunner runner = new TwitterAsyncTaskRunner();
+        TwitterAsyncTaskRunner twitterRunner = new TwitterAsyncTaskRunner();
        // runner.execute(ticker); 
 
        /* String body = myBodies.get(0);
