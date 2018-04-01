@@ -94,9 +94,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/risk_slider"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
         android:fontFamily="@font/abeezee"
         android:text="no risk                                                high risk"
-        android:textColor="@color/text"/>
+        android:textColor="@color/text" />
 
     <TextView
         android:id="@+id/slider_max"
@@ -112,7 +113,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/stock_list"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:background="@color/text"
         android:text="Analyze"
         android:layout_centerInParent="true"
@@ -124,6 +125,8 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_below="@id/risk_slider"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"/>
 
 </RelativeLayout>
