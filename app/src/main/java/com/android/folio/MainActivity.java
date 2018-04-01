@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,6 +24,8 @@ import android.view.View;
 import android.app.ProgressDialog;
 import android.widget.Button;
 import android.widget.EditText;
+
+import java.util.ArrayList;
 
 public class MainActivity extends Activity implements View.OnClickListener{
 
@@ -55,7 +58,41 @@ public class MainActivity extends Activity implements View.OnClickListener{
             db.child("users").child(currUser.getUid()).child("isVirgin").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    updateUI(currUser, Integer.parseInt(dataSnapshot.getValue().toString()));
+                    final FirebaseUser user = mAuth.getCurrentUser();
+                    db.child("users").child(user.getUid()).child("isVirgin").addValueEventListener(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            final int bool = Integer.parseInt(dataSnapshot.getValue().toString();
+
+                            db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot ds) {
+                                    final ArrayList<String> tickers = new ArrayList<>();
+                                    final ArrayList<Integer> weights = new ArrayList<>();
+
+                                    for(DataSnapshot stocks : ds.getChildren()) {
+                                        tickers.add(stocks.getKey());
+                                        weights.add(Integer.parseInt(stocks.getValue().toString()));
+                                    }
+
+                                    final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
+                                    intent.putExtra("stockArray", tickers);
+                                    intent.putExtra("weightArray", weights);
+                                    updateUI(user, bool,intent);
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
                 }
 
                 @Override
@@ -116,9 +153,33 @@ public class MainActivity extends Activity implements View.OnClickListener{
                             // Sign in success, update UI with the signed-in user's information
                             final FirebaseUser user = mAuth.getCurrentUser();
                             db.child("users").child(user.getUid()).child("isVirgin").addValueEventListener(new ValueEventListener() {
+
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                        updateUI(user, Integer.parseInt(dataSnapshot.getValue().toString()));
+                                    final int bool = Integer.parseInt(dataSnapshot.getValue().toString());
+
+                                    db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot ds) {
+                                            final ArrayList<String> tickers = new ArrayList<>();
+                                            final ArrayList<Integer> weights = new ArrayList<>();
+
+                                            for(DataSnapshot stocks : ds.getChildren()) {
+                                                tickers.add(stocks.getKey());
+                                                weights.add(Integer.parseInt(stocks.getValue().toString()));
+                                            }
+
+                                            final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
+                                            intent.putExtra("stockArray", tickers);
+                                            intent.putExtra("weightArray", weights);
+                                            updateUI(user, bool,intent);
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                        }
+                                    });
                                 }
 
                                 @Override
@@ -135,14 +196,23 @@ public class MainActivity extends Activity implements View.OnClickListener{
                 });
     }
 
-    private void updateUI(FirebaseUser currentUser, int isVirgin) {
+    private void updateUI(FirebaseUser currentUser, int isVirgin, Intent intent) {
 
         if (currentUser != null) {
             finish();
             if(isVirgin == 1) {
                 startActivity(new Intent(this, StockActivity.class));
             } else {
-                startActivity(new Intent(this, HomePageActivity.class));
+                startActivity(intent);
+            }
+        }
+    }
+    private void updateUI(FirebaseUser currentUser, int isVirgin) {
+
+        if (currentUser != null) {
+            finish();
+            if(isVirgin == 1) {
+                startActivity(new Intent(this, StockActivity.class));
             }
         }
     }
