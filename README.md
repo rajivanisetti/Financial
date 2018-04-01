@@ -26,9 +26,9 @@ fol.io provides financial analysis and advice based on the stocks you want to in
 ![alt text](https://github.com/rajivanisetti/folio/blob/master/architecture.png)
 
 ## Screenshots
-![alt text](https://imgur.com/EFeI7J4.png)
-![alt text](https://imgur.com/BeOuuXB.png)
-![alt text](https://imgur.com/Ki4kQfy.png)
-![alt text](https://imgur.com/AnARP9N.png)
-![alt text](https://imgur.com/t63lLHN.png)
-![alt text](https://imgur.com/KI2qsqb.png)
+<img src="https://i.imgur.com/EFeI7J4.jpg" width="360">
+<img src="https://i.imgur.com/BeOuuXB.jpg" width="360">
+<img src="https://i.imgur.com/Ki4kQfy.jpg" width="360">
+<img src="https://i.imgur.com/AnARP9N.jpg" width="360">
+<img src="https://i.imgur.com/t63lLHN.jpg" width="360">
+<img src="https://i.imgur.com/KI2qsqb.jpg" width="360">
