@@ -128,6 +128,8 @@ public class StockActivity extends AppCompatActivity {
                     Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
                     intent.putExtra("parameterString", s);
                     intent.putExtra("riskRating", riskRating);
+                    intent.putExtra("stockArray", tickers);
+                    intent.putExtra("weightArray", weights);
                     startActivity(intent);
                 }
             }

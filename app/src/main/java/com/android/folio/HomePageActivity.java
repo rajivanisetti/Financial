@@ -8,8 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -18,14 +23,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.services.language.v1beta2.CloudNaturalLanguage;
-import com.google.api.services.language.v1beta2.CloudNaturalLanguageRequestInitializer;
-import com.google.api.services.language.v1beta2.model.AnnotateTextRequest;
-import com.google.api.services.language.v1beta2.model.AnnotateTextResponse;
-import com.google.api.services.language.v1beta2.model.Document;
-import com.google.api.services.language.v1beta2.model.Features;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,8 +30,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -47,6 +42,9 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
         //==============================================================================================
         private FirebaseAuth mAuth;
         private DatabaseReference db;
+
+        ArrayList<String> tickers;
+        ArrayList<Integer> weights;
 
         //==============================================================================================
         // On Create Setup
@@ -65,6 +63,9 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(new Intent(this, MainActivity.class));
             }
 
+            tickers = getIntent().getStringArrayListExtra("stockArray");
+            weights = getIntent().getIntegerArrayListExtra("weightArray");
+
             // Layout Setup
             setContentView(R.layout.activity_home_page);
             initChart();
@@ -72,8 +73,40 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
             //Add ActionListeners
             findViewById(R.id.buttonSignOut).setOnClickListener(this);
 
+            ListView stockList = findViewById(R.id.stock_list);
+
+            final ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, android.R.id.text1, tickers) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+                    TextView text1 = view.findViewById(android.R.id.text1);
+                    TextView text2 = view.findViewById(android.R.id.text2);
+
+                    text1.setText(tickers.get(position));
+                    text2.setText("Weight: " + weights.get(position).toString() + "%");
+                    return view;
+                }
+            };
+
+            stockList.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+            stockList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String ticker = adapter.getItem(position).toString();
+
+                    Intent intent = new Intent(getBaseContext(), AnalysisActivity.class);
+                    intent.putExtra("ticker", ticker);
+                    intent.putExtra("risk", getIntent().getIntExtra("riskRating", 0));
+                    startActivity(intent);
+                }
+            });
+
+            String param = getIntent().getStringExtra("parameterString");
+
             AsyncTaskRunner runner = new AsyncTaskRunner();
-            runner.execute();
+            runner.execute(param);
         }
 
         //==============================================================================================
@@ -123,16 +156,16 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
                 public void onCancelled(DatabaseError databaseError) {
                     System.out.println("PULLING STOCKS FAILED");
                 }
-                });
+            });
         }
 
-    static class AsyncTaskRunner extends AsyncTask <Void, Void, String> {
+    static class AsyncTaskRunner extends AsyncTask <String, Void, String> {
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(String... params) {
             APIReader apiReader = new APIReader();
             String output = "";
             try {
-                output = apiReader.readData("BLK~25|AAPL~25|IXN~25|MALOX~25", "USD", true);
+                output = apiReader.readData(params[0], "USD", true);
             }
             catch (Exception e) {
                 Log.e("APIReader", e.toString());
