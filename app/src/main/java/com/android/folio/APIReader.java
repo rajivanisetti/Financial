@@ -29,4 +29,20 @@ public class APIReader {
 
         return output;
     }
+
+    public String readDataWithURL(String urlString, String currency, boolean extraCalculations) throws Exception {
+        String output = "";
+
+        URL url = new URL(urlString);
+        URLConnection urlConnection = url.openConnection();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        String inputLine;
+        while ((inputLine = bufferedReader.readLine()) != null) {
+            output = output.concat(inputLine);
+            Log.d("API input", inputLine);
+        }
+        bufferedReader.close();
+
+        return output;
+    }
 }

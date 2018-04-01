@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/signUpPage"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorPrimary"
+    android:background="@color/background"
     android:orientation="vertical"
     android:scrollbarAlwaysDrawVerticalTrack="true">
 
@@ -36,39 +36,50 @@
                     android:paddingTop="15dp">
 
                     <ImageView
-                        android:layout_width="85dp"
-                        android:layout_height="85dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="20sp"
-                        android:layout_marginTop="20sp"
-                        android:src="@mipmap/ic_launcher"/>
+                        android:layout_margin="50sp"
+                        android:src="@mipmap/ic_launcher" />
 
-                        <EditText
-                            android:id="@+id/editTextName"
-                            android:layout_width="fill_parent"
-                            android:layout_height="40dp"
-                            android:drawableTint="#f5913f"
-                            android:hint="@string/name"
-                            android:inputType="textPersonName"
-                            android:singleLine="true" />
+                    <EditText
+                        android:id="@+id/editTextName"
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:drawableTint="#f5913f"
+                        android:hint="@string/name"
+                        android:inputType="textPersonName"
+                        android:singleLine="true"
+                        android:backgroundTint="@color/text"
+                        android:textColorHint="@color/text"
+                        android:layout_margin="5dp"
+                        android:textColor="@color/text"/>
 
-                        <EditText
-                            android:id="@+id/editTextEmail"
-                            android:layout_width="fill_parent"
-                            android:layout_height="40dp"
-                            android:drawableTint="#f5913f"
-                            android:hint="@string/email"
-                            android:inputType="textEmailAddress"
-                            android:singleLine="true" />
+                    <EditText
+                        android:id="@+id/editTextEmail"
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:drawableTint="#f5913f"
+                        android:hint="@string/email"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true"
+                        android:backgroundTint="@color/text"
+                        android:textColorHint="@color/text"
+                        android:layout_margin="5dp"
+                        android:textColor="@color/text" />
 
-                        <EditText
-                            android:id="@+id/editTextPassword"
-                            android:layout_width="fill_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="16dp"
-                            android:hint="@string/password"
-                            android:inputType="textPassword"
-                            android:textColor="#FFF"/>
+                    <EditText
+                        android:id="@+id/editTextPassword"
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="16dp"
+                        android:hint="@string/password"
+                        android:inputType="textPassword"
+                        android:textColor="@color/text"
+                        android:backgroundTint="@color/text"
+                        android:textColorHint="@color/text"
+                        android:layout_margin="5dp"
+                        />
 
 
                     <Button
@@ -92,7 +103,7 @@
                         android:layout_gravity="center_horizontal"
                         android:paddingTop="5dp"
                         android:text="@string/already_account"
-                        android:textColor="#FFF"/>
+                        android:textColor="@color/text"/>
 
                 </LinearLayout>
 

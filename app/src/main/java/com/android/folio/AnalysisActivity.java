@@ -15,6 +15,9 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 import android.os.AsyncTask;
@@ -39,6 +42,10 @@ import com.google.api.services.language.v1beta2.model.Document;
 import com.google.api.services.language.v1beta2.model.Features;
 
 
+import de.codecrafters.tableview.TableView;
+import de.codecrafters.tableview.model.TableColumnWeightModel;
+import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
+import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Status;
@@ -65,9 +72,11 @@ public class AnalysisActivity extends AppCompatActivity {
 
         String ticker = getIntent().getStringExtra("ticker");
 
+        FinanceAsyncTaskRunner financeRunner = new FinanceAsyncTaskRunner();
+        financeRunner.execute(ticker);
+
         AsyncTaskRunner runner = new AsyncTaskRunner();
         runner.execute(ticker);
-
 
         TwitterAsyncTaskRunner twitterRunner = new TwitterAsyncTaskRunner();
        // runner.execute(ticker); 
@@ -210,6 +219,103 @@ public class AnalysisActivity extends AppCompatActivity {
 
 
             return null;
+        }
+    }
+
+    class FinanceAsyncTaskRunner extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            APIReader apiReader = new APIReader();
+            String output = "";
+
+            String s = "https://test3.blackrock.com/tools/hackathon/performance?identifiers=" + params[0] +
+                    "&outputDataExpression=resultMap[%27RETURNS%27][0].latestPerf";
+
+            try {
+                output = apiReader.readDataWithURL(s, "USD", true);
+                Log.e("output", output);
+            } catch (Exception e) {
+                Log.e("APIReader", e.toString());
+            }
+            return output;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Pattern pattern = Pattern.compile("\"oneYear\":[0-9]*[.][0-9]*");
+            Matcher matcher = pattern.matcher(result);
+            String oneYear = "";
+
+            if (matcher.find()) {
+                oneYear = matcher.group(0).replaceAll("[^\\d.]", "");
+            }
+
+            pattern = Pattern.compile("\"threeYear\":[0-9]*[.][0-9]*");
+            matcher = pattern.matcher(result);
+            String threeYear = "";
+
+            if (matcher.find()) {
+                threeYear = matcher.group(0).replaceAll("[^\\d.]", "");
+            }
+
+            pattern = Pattern.compile("\"tenYear\":[0-9]*[.][0-9]*");
+            matcher = pattern.matcher(result);
+            String tenYear = "";
+
+            if (matcher.find()) {
+                tenYear = matcher.group(0).replaceAll("[^\\d.]", "");
+            }
+
+            pattern = Pattern.compile("\"oneYearRisk\":[0-9]*[.][0-9]*");
+            matcher = pattern.matcher(result);
+            String oneYearRisk = "";
+
+            if (matcher.find()) {
+                oneYearRisk = matcher.group(0).replaceAll("[^\\d.]", "");
+            }
+
+            pattern = Pattern.compile("\"threeYearRisk\":[0-9]*[.][0-9]*");
+            matcher = pattern.matcher(result);
+            String threeYearRisk = "";
+
+            if (matcher.find()) {
+                threeYearRisk = matcher.group(0).replaceAll("[^\\d.]", "");
+            }
+
+            pattern = Pattern.compile("\"tenYearRisk\":[0-9]*[.][0-9]*");
+            matcher = pattern.matcher(result);
+            String tenYearRisk = "";
+
+            if (matcher.find()) {
+                tenYearRisk = matcher.group(0).replaceAll("[^\\d.]", "");
+            }
+
+            try {
+                String[][] data = {{"One Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYear))},
+                        {"Three Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYear))},
+                        {"Ten Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYear))},
+                        {"One Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYearRisk))},
+                        {"Three Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYearRisk))},
+                        {"Ten Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYearRisk))}};
+
+                TableView tv = findViewById(R.id.tableView);
+                SimpleTableDataAdapter adapter = new SimpleTableDataAdapter(getBaseContext(), data);
+                tv.setDataAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+                Log.e("oneyear", oneYear);
+
+                TableColumnWeightModel columnModel = new TableColumnWeightModel(2);
+                columnModel.setColumnWeight(0, 2);
+                columnModel.setColumnWeight(1, 1);
+                tv.setColumnModel(columnModel);
+
+                String[] headers = {"Metric", "Statistic"};
+                tv.setHeaderAdapter(new SimpleTableHeaderAdapter(getBaseContext(), headers));
+            }
+            catch(Exception e){
+                Log.e("number error", e.toString());
+            }
         }
     }
 }
