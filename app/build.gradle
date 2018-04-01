@@ -30,6 +30,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:12.0.1'
     implementation 'com.google.firebase:firebase-database:12.0.1'
 
+    implementation 'org.jsoup:jsoup:1.11.1'
     implementation 'com.google.api-client:google-api-client-android:1.22.0'
     implementation 'com.google.apis:google-api-services-speech:v1beta1-rev336-1.22.0'
     implementation 'com.google.apis:google-api-services-language:v1beta2-rev6-1.22.0'
