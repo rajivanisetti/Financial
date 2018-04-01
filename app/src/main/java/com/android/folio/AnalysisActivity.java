@@ -289,13 +289,21 @@ public class AnalysisActivity extends AppCompatActivity {
                 tenYearRisk = matcher.group(0).replaceAll("[^\\d.]", "");
             }
 
+            oneYear = (oneYear.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYear));
+            threeYear = (threeYear.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYear));
+            tenYear = (tenYear.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYear));
+            oneYearRisk = (oneYearRisk.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYearRisk));
+            threeYearRisk = (threeYearRisk.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYearRisk));
+            tenYearRisk = (tenYearRisk.equals("")) ? "N/A" : String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYearRisk));
+
             try {
-                String[][] data = {{"One Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYear))},
-                        {"Three Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYear))},
-                        {"Ten Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYear))},
-                        {"One Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYearRisk))},
-                        {"Three Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYearRisk))},
-                        {"Ten Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYearRisk))}};
+                String[][] data = {
+                        {"One Year Performance", oneYear},
+                        {"Three Year Performance", threeYear},
+                        {"Ten Year Performance", tenYear},
+                        {"One Year Risk", oneYearRisk},
+                        {"Three Year Risk", threeYearRisk},
+                        {"Ten Year Risk", tenYearRisk}};
 
                 TableView tv = findViewById(R.id.tableView);
                 SimpleTableDataAdapter adapter = new SimpleTableDataAdapter(getBaseContext(), data);
