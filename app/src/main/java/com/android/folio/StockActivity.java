@@ -86,8 +86,24 @@ public class StockActivity extends AppCompatActivity {
                     Snackbar.make(findViewById(R.id.stock_list), "Weights do not add up to 100.", Snackbar.LENGTH_LONG).show();
                 }
                 else {
-                    // TODO: PASS RATING TO NEXT ACTIVITY
+                    String s = "";
+
+                    for (int i = 0; i < tickers.size(); i++) {
+                        String ticker = tickers.get(i);
+                        String weight = weights.get(i).toString();
+
+                        s = s.concat(ticker);
+                        s = s.concat("~");
+                        s = s.concat(weight);
+                        s = s.concat("|");
+                    }
+
+                    // remove trailing "|"
+                    s = s.substring(0, s.length() - 1);
+
                     Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
+                    intent.putExtra("parameterString", s);
+                    intent.putExtra("riskRating", riskRating);
                     startActivity(intent);
                 }
             }
