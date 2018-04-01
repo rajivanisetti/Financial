@@ -30,13 +30,15 @@
             android:layout_marginTop="8dp"
             android:text="Based on an analysis of online sentiment and public opinion towards this stock, we've given it a FolioScore™ of:"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textColor="@color/text" />
 
         <TextView
             android:id="@+id/score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:textColor="@color/text"
             android:textSize="32sp"
             android:textStyle="bold" />
 
@@ -46,7 +48,8 @@
             android:layout_marginTop="8dp"
             android:text="scale 0-100"
             android:layout_marginBottom="8dp"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="@color/text" />
 
         <View
             android:layout_width="fill_parent"
@@ -58,13 +61,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Recent News:"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textColor="@color/text" />
 
         <ListView
             android:id="@+id/links"
             android:layout_width="wrap_content"
             android:layout_height="500dp"
-            android:layout_marginTop="8dp"></ListView>
+            android:layout_marginTop="8dp"
+            ></ListView>
 
     </LinearLayout>
 </ScrollView>
