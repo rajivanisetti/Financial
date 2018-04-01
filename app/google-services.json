@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "61504594398",
+    "firebase_url": "https://folio-1a1bc.firebaseio.com",
+    "project_id": "folio-1a1bc",
+    "storage_bucket": "folio-1a1bc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:61504594398:android:257a50da9b339457",
+        "android_client_info": {
+          "package_name": "com.android.folio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "61504594398-ia82beut77suegtpn7d14k5uit8ps44d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.folio",
+            "certificate_hash": "bba34386f5f0f27ea8be27c58f0f6bc2c4174c8d"
+          }
+        },
+        {
+          "client_id": "61504594398-vusstt9r7avc6gfbhqvc9v5ecm8v4ruh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_9MpuaTna2JqfRHLSrdqqfGAwkHVDMEw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "61504594398-vusstt9r7avc6gfbhqvc9v5ecm8v4ruh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
