@@ -1,12 +1,16 @@
 package com.android.folio;
 
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import org.jsoup.Jsoup;
@@ -28,8 +32,13 @@ import android.util.Log;
 import android.view.View;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -60,7 +69,7 @@ public class AnalysisActivity extends AppCompatActivity {
     float TwitterSentiment = 0;
     float totalSentiment = 0;
     float aveTwitterSentiment;
-    float sentAve;
+    float FolioScore;
     int read = 0;
     private String CLOUD_API_KEY = "AIzaSyBP_3jPRzVum-DnQqie68laZ3dWGgNaHow";
     ArrayList<String> myBodies = new ArrayList<String>();
@@ -113,7 +122,7 @@ public class AnalysisActivity extends AppCompatActivity {
                         Log.e("URL", newUrl);
                         Log.e("Article Name", articleName);
                         String s = "";
-                        urls.add(myUrl);
+                        urls.add(newUrl);
                         articleNames.add(articleName);
 
 
@@ -143,10 +152,56 @@ public class AnalysisActivity extends AppCompatActivity {
                 Log.e("Main", e.toString());
             }
 
-            sentAve = totalSentiment / 5;
-            Log.e("SentAve", Float.toString(sentAve));
+            FolioScore = ((totalSentiment / 5) + 1) * 50;       // MACHINE LEARNING AND ARTIFICIAL INTELLIGENCE !!!
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            ListView lv = findViewById(R.id.links);
+            lv.setOnTouchListener(new View.OnTouchListener() {
+                // Setting on Touch Listener for handling the touch inside ScrollView
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // Disallow the touch request for parent scroll on touch of child view
+                    v.getParent().requestDisallowInterceptTouchEvent(true);
+                    return false;
+                }
+            });
+
+            final ArrayAdapter adapter = new ArrayAdapter<String>(getBaseContext(), android.R.layout.simple_list_item_1, android.R.id.text1, articleNames) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+                    TextView text1 = view.findViewById(android.R.id.text1);
+
+                    text1.setText(articleNames.get(position));
+                    return view;
+                }
+            };
+
+            lv.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String url = urls.get(position);
+                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                    CustomTabsIntent customTabsIntent = builder.build();
+                    customTabsIntent.launchUrl(getBaseContext(), Uri.parse(url));
+                }
+            });
+            TextView tv = findViewById(R.id.score);
+            tv.setText(Integer.toString((int) FolioScore));
+
+            if (FolioScore < 40)
+                tv.setTextColor(Color.RED);
+            else if (FolioScore < 60)
+                tv.setTextColor(Color.YELLOW);
+            else
+                tv.setTextColor(Color.GREEN);
         }
     }
 

@@ -39,7 +39,7 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'de.codecrafters.tableview:tableview:2.8.0'
     implementation 'org.twitter4j:twitter4j-core:4.0.6'
-
+    implementation 'com.android.support:customtabs:27.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
