@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/signUpPage"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background"
+    android:background="@drawable/backgroundfolio">
     android:orientation="vertical"
     android:scrollbarAlwaysDrawVerticalTrack="true">
 

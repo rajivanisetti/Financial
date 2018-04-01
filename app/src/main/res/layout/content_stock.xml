@@ -7,7 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".StockActivity"
     tools:showIn="@layout/activity_stock"
-    android:background="@color/background">
+    android:background="@drawable/backgroundfolio">
 
     <TextView
         android:id="@+id/instructions"
@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/abeezee"
         android:text="Please enter your desired stocks along with their weights in your portfolio:"
         android:textAlignment="center"
@@ -95,7 +95,8 @@
         android:layout_below="@id/risk_slider"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/abeezee"
-        android:text="no risk                                                high risk" />
+        android:text="no risk                                                high risk"
+        android:textColor="@color/text"/>
 
     <TextView
         android:id="@+id/slider_max"

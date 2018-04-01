@@ -47,9 +47,6 @@ public class StockActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_stock);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         final EditText stockName = findViewById(R.id.stock_name);
         final EditText stockWeight = findViewById(R.id.stock_weight);
         final ListView stockList = findViewById(R.id.stock_list);

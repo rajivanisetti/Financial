@@ -168,6 +168,8 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
                     // Get the chart;
                     PieChart chart = (PieChart) findViewById(R.id.pieChart);
                     chart.setData(data);
+                    chart.setHoleRadius(0);
+                    chart.setTransparentCircleRadius(0);
                     chart.animateY(3000, Easing.EasingOption.EaseOutBack);
                     chart.invalidate();
                 } else {

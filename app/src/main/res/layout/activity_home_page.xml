@@ -2,14 +2,15 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@drawable/backgroundfolio">
+
 
     <LinearLayout
         android:id="@+id/graph_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/background">
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/editText2"
@@ -33,21 +34,24 @@
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChart"
             android:layout_width="match_parent"
-            android:layout_marginTop="12dp"
-            android:layout_height="350dp" />
+            android:layout_height="350dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="12dp" />
 
         <de.codecrafters.tableview.TableView xmlns:table="http://schemas.android.com/apk/res-auto"
             android:id="@+id/tableView"
             android:layout_width="match_parent"
             android:layout_height="450dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:layout_marginTop="16dp"
-            table:tableView_columnCount="2"
-            android:textColor="@color/text" />
+            android:textColor="@color/text"
+            table:tableView_columnCount="2" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/BLACKS_darkGray"
             android:orientation="vertical"
             android:padding="10dp"
             android:layout_marginBottom="0dp">
@@ -58,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:text="Selected stocks:"
-                android:textColor="@color/BLACKS_black"
+                android:textColor="@color/text"
                 android:textSize="22sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -68,13 +72,16 @@
             android:layout_width="wrap_content"
             android:layout_height="350dp"
             android:layout_marginBottom="0dp"
-            />
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp" />
 
         <Button
             android:id="@+id/buttonSignOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:text="Sign out"
             android:background="@color/text"
             android:textColor="@color/background"/>
