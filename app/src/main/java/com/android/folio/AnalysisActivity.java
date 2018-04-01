@@ -122,7 +122,7 @@ public class AnalysisActivity extends AppCompatActivity {
                     }
                 }
 
-                // At this point, MyBodies array has the words of each if the first 5 files //
+                // At this point, MyBodies array has the words of each in the first 5 files //
 
             } catch (IOException e) {
                 Log.e("Main", e.toString());
