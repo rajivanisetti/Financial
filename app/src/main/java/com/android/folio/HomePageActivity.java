@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -44,147 +45,166 @@ import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class HomePageActivity extends AppCompatActivity implements View.OnClickListener {
 
-        //==============================================================================================
-        // Declare Variables
-        //==============================================================================================
-        private FirebaseAuth mAuth;
-        private DatabaseReference db;
+    //==============================================================================================
+    // Declare Variables
+    //==============================================================================================
+    private FirebaseAuth mAuth;
+    private DatabaseReference db;
 
-        ArrayList<String> tickers;
-        ArrayList<Integer> weights;
+    ArrayList<String> tickers;
+    ArrayList<Integer> weights;
 
-        //==============================================================================================
-        // On Create Setup
-        //==============================================================================================
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
+    //==============================================================================================
+    // On Create Setup
+    //==============================================================================================
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
-            super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-            // Check if User is Authenticated
-            mAuth = FirebaseAuth.getInstance();
-            db = FirebaseDatabase.getInstance().getReference();
+        // Check if User is Authenticated
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseDatabase.getInstance().getReference();
 
-            if(mAuth.getCurrentUser() == null) {
+        if (mAuth.getCurrentUser() == null) {
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+        }
+
+        tickers = getIntent().getStringArrayListExtra("stockArray");
+        weights = getIntent().getIntegerArrayListExtra("weightArray");
+
+        // Layout Setup
+        setContentView(R.layout.activity_home_page);
+        initChart();
+
+        //Add ActionListeners
+        findViewById(R.id.buttonSignOut).setOnClickListener(this);
+
+        ListView stockList = findViewById(R.id.stock_list);
+
+        stockList.setOnTouchListener(new View.OnTouchListener() {
+            // Setting on Touch Listener for handling the touch inside ScrollView
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Disallow the touch request for parent scroll on touch of child view
+                v.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
+
+        final ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, android.R.id.text1, tickers) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text1 = view.findViewById(android.R.id.text1);
+                TextView text2 = view.findViewById(android.R.id.text2);
+
+                text1.setText(tickers.get(position));
+                text2.setText("Weight: " + weights.get(position).toString() + "%");
+                return view;
+            }
+        };
+
+        stockList.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+        stockList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String ticker = adapter.getItem(position).toString();
+
+                Intent intent = new Intent(getBaseContext(), AnalysisActivity.class);
+                intent.putExtra("ticker", ticker);
+                intent.putExtra("risk", getIntent().getIntExtra("riskRating", 0));
+                startActivity(intent);
+            }
+        });
+
+        String param = getIntent().getStringExtra("parameterString");
+
+        AsyncTaskRunner runner = new AsyncTaskRunner();
+        runner.execute(param);
+    }
+
+    //==============================================================================================
+    // Action Listeners
+    //==============================================================================================
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+            case R.id.buttonSignOut:
                 finish();
+                mAuth.getInstance().signOut();
                 startActivity(new Intent(this, MainActivity.class));
-            }
-
-            tickers = getIntent().getStringArrayListExtra("stockArray");
-            weights = getIntent().getIntegerArrayListExtra("weightArray");
-
-            // Layout Setup
-            setContentView(R.layout.activity_home_page);
-            initChart();
-
-            //Add ActionListeners
-            findViewById(R.id.buttonSignOut).setOnClickListener(this);
-
-            ListView stockList = findViewById(R.id.stock_list);
-
-            stockList.setOnTouchListener(new View.OnTouchListener() {
-                // Setting on Touch Listener for handling the touch inside ScrollView
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    // Disallow the touch request for parent scroll on touch of child view
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                    return false;
-                }
-            });
-
-            final ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, android.R.id.text1, tickers) {
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    View view = super.getView(position, convertView, parent);
-                    TextView text1 = view.findViewById(android.R.id.text1);
-                    TextView text2 = view.findViewById(android.R.id.text2);
-
-                    text1.setText(tickers.get(position));
-                    text2.setText("Weight: " + weights.get(position).toString() + "%");
-                    return view;
-                }
-            };
-
-            stockList.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-
-            stockList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String ticker = adapter.getItem(position).toString();
-
-                    Intent intent = new Intent(getBaseContext(), AnalysisActivity.class);
-                    intent.putExtra("ticker", ticker);
-                    intent.putExtra("risk", getIntent().getIntExtra("riskRating", 0));
-                    startActivity(intent);
-                }
-            });
-
-            String param = getIntent().getStringExtra("parameterString");
-
-            AsyncTaskRunner runner = new AsyncTaskRunner();
-            runner.execute(param);
+                break;
         }
+    }
 
-        //==============================================================================================
-        // Action Listeners
-        //==============================================================================================
-        @Override
-        public void onClick(View view) {
-            switch(view.getId()) {
+    public void initChart() {
+        final FirebaseUser user = mAuth.getCurrentUser();
 
-                case R.id.buttonSignOut:
-                    finish();
-                    mAuth.getInstance().signOut();
-                    startActivity(new Intent(this, MainActivity.class));
-                    break;
-            }
-        }
+        db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
 
-        public void initChart() {
-            final FirebaseUser user = mAuth.getCurrentUser();
+                    List<PieEntry> pieEntries = new ArrayList<>();
 
-            db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()){
-
-                        List<PieEntry> pieEntries = new ArrayList<>();
-
-                        for(DataSnapshot stocks : dataSnapshot.getChildren()) {
-                            pieEntries.add(new PieEntry(Integer.parseInt(stocks.getValue().toString()), stocks.getKey().toString()));
-                        }
-
-                        PieDataSet dataSet = new PieDataSet(pieEntries, "Allocations");
-                        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-                        PieData data = new PieData(dataSet);
-
-                        // Get the chart;
-                        PieChart chart = (PieChart) findViewById(R.id.pieChart);
-                        chart.setData(data);
-                        chart.animateY(3000, Easing.EasingOption.EaseOutBack);
-                        chart.invalidate();
-                    } else {
-                        System.out.println("USER HAS NO STOCKS");
+                    for (DataSnapshot stocks : dataSnapshot.getChildren()) {
+                        pieEntries.add(new PieEntry(Integer.parseInt(stocks.getValue().toString()), stocks.getKey().toString()));
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    System.out.println("PULLING STOCKS FAILED");
-                }
-            });
-        }
+                    PieDataSet dataSet = new PieDataSet(pieEntries, "Allocations");
+                    dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                    PieData data = new PieData(dataSet);
 
-    class AsyncTaskRunner extends AsyncTask <String, Void, String> {
+                    // Get the chart;
+                    PieChart chart = (PieChart) findViewById(R.id.pieChart);
+                    chart.setData(data);
+                    chart.animateY(3000, Easing.EasingOption.EaseOutBack);
+                    chart.invalidate();
+                } else {
+                    System.out.println("USER HAS NO STOCKS");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("PULLING STOCKS FAILED");
+            }
+        });
+    }
+
+    class AsyncTaskRunner extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
             APIReader apiReader = new APIReader();
             String output = "";
-            try {
-                output = apiReader.readData(params[0], "USD", true);
+
+            String s = "";
+
+            if (params[0] == null) {
+                for (int i = 0; i < tickers.size(); i++) {
+                    String ticker = tickers.get(i);
+                    String weight = weights.get(i).toString();
+
+                    s = s.concat(ticker);
+                    s = s.concat("~");
+                    s = s.concat(weight);
+                    s = s.concat("|");
+                }
+
+                // remove trailing "|"
+                s = s.substring(0, s.length() - 1);
             }
-            catch (Exception e) {
+            else
+                s = params[0];
+            try {
+                output = apiReader.readData(s, "USD", true);
+                Log.e("output", output);
+            } catch (Exception e) {
                 Log.e("APIReader", e.toString());
             }
             return output;
@@ -240,27 +260,30 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
                 tenYearRisk = matcher.group(0).replaceAll("[^\\d.]", "");
             }
 
-            String[][] data = {{"One Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYear))},
-                                {"Three Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYear))},
-                                {"Ten Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYear))},
-                                {"One Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYearRisk))},
-                                {"Three Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYearRisk))},
-                                {"Ten Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYearRisk))}};
+            try {
+                String[][] data = {{"One Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYear))},
+                        {"Three Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYear))},
+                        {"Ten Year Performance", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYear))},
+                        {"One Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(oneYearRisk))},
+                        {"Three Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(threeYearRisk))},
+                        {"Ten Year Risk", String.format(Locale.US, "%.4g%n", Float.parseFloat(tenYearRisk))}};
 
-            Log.e("data", String.format("%.4g%n", Float.parseFloat(oneYearRisk)) + " " + oneYearRisk + " " + threeYear + " " + threeYearRisk);
+                TableView tv = findViewById(R.id.tableView);
+                SimpleTableDataAdapter adapter = new SimpleTableDataAdapter(getBaseContext(), data);
+                tv.setDataAdapter(adapter);
+                adapter.notifyDataSetChanged();
 
-            TableView tv = findViewById(R.id.tableView);
-            SimpleTableDataAdapter adapter = new SimpleTableDataAdapter(getBaseContext(), data);
-            tv.setDataAdapter(adapter);
-            adapter.notifyDataSetChanged();
+                TableColumnWeightModel columnModel = new TableColumnWeightModel(2);
+                columnModel.setColumnWeight(0, 2);
+                columnModel.setColumnWeight(1, 1);
+                tv.setColumnModel(columnModel);
 
-            TableColumnWeightModel columnModel = new TableColumnWeightModel(2);
-            columnModel.setColumnWeight(0, 2);
-            columnModel.setColumnWeight(1, 1);
-            tv.setColumnModel(columnModel);
-
-            String[] headers = {"Metric", "Statistic"};
-            tv.setHeaderAdapter(new SimpleTableHeaderAdapter(getBaseContext(), headers));
+                String[] headers = {"Metric", "Statistic"};
+                tv.setHeaderAdapter(new SimpleTableHeaderAdapter(getBaseContext(), headers));
+            }
+            catch(Exception e){
+                Log.e("number error", e.toString());
+            }
         }
     }
 }

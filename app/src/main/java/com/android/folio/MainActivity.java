@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +40,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private ProgressDialog progressDialog;
     private DatabaseReference db;
 
+    private ArrayList<String> tickers = new ArrayList<>();
+    private ArrayList<Integer> weights = new ArrayList<>();
+
     // APIs
     private FirebaseAuth mAuth;
 
@@ -68,8 +72,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
                             db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot ds) {
-                                    final ArrayList<String> tickers = new ArrayList<>();
-                                    final ArrayList<Integer> weights = new ArrayList<>();
+                                    tickers = new ArrayList<>();
+                                    weights = new ArrayList<>();
 
                                     for(DataSnapshot stocks : ds.getChildren()) {
                                         tickers.add(stocks.getKey());
@@ -79,8 +83,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
                                     final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
                                     intent.putExtra("stockArray", tickers);
                                     intent.putExtra("weightArray", weights);
-                                    updateUI(user, bool,intent);
 
+                                    updateUI(user, bool,intent);
                                 }
 
                                 @Override
@@ -118,7 +122,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
         textViewForgotPassword.setOnClickListener(this);
 
     }
-
 
     //==============================================================================================
     // Helper Functions
@@ -172,7 +175,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
                                             final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
                                             intent.putExtra("stockArray", tickers);
                                             intent.putExtra("weightArray", weights);
-                                            updateUI(user, bool,intent);
+                                            updateUI(user, bool, intent);
 
                                         }
 

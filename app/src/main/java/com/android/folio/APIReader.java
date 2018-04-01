@@ -13,6 +13,8 @@ public class APIReader {
         urlString += "?positions=" + positions + "&currency=" + currency + "&calculateRisk=" + extraCalculations +
                 "&calculateExpectedReturns=" + extraCalculations + "&rcs=hackathon:pa-latest-perf";
 
+        Log.e("urlString", urlString);
+
         String output = "";
 
         URL url = new URL(urlString);
