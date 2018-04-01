@@ -132,7 +132,7 @@ public class SignUpPageActivity extends AppCompatActivity implements View.OnClic
 
         if (currentUser != null) {
             finish();
-            startActivity(new Intent(this, HomePageActivity.class));
+            startActivity(new Intent(this, StockActivity.class));
         } else {
             Log.d(TAG, "current user is null");
         }

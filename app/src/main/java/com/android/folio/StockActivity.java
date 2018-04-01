@@ -1,0 +1,96 @@
+package com.android.folio;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+public class StockActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_stock);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        final EditText stockName = findViewById(R.id.stock_name);
+        final EditText stockWeight = findViewById(R.id.stock_weight);
+        final ListView stockList = findViewById(R.id.stock_list);
+        final Button addButton = findViewById(R.id.add_button);
+
+        final ArrayList<String> tickers = new ArrayList<>();
+        final ArrayList<Integer> weights = new ArrayList<>();
+
+        final SeekBar risk = findViewById(R.id.risk_slider);
+
+        Button doneButton = findViewById(R.id.done_button);
+
+        final ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_2, android.R.id.text1, tickers) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text1 = view.findViewById(android.R.id.text1);
+                TextView text2 = view.findViewById(android.R.id.text2);
+
+                text1.setText(tickers.get(position));
+                text2.setText("Weight: " + weights.get(position).toString() + "%");
+                return view;
+            }
+        };
+
+        stockList.setAdapter(adapter);
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tickers.add(stockName.getText().toString());
+                weights.add(Integer.parseInt(stockWeight.getText().toString()));
+
+                adapter.notifyDataSetChanged();
+
+                stockName.setText("");
+                stockWeight.setText("");
+
+                // TODO: UPLOAD TO FIREBASE HERE
+
+            }
+        });
+
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int riskRating = risk.getProgress();
+
+                int weightSum = 0;
+
+                for (int i : weights) {
+                    weightSum += i;
+                }
+
+                if (weightSum != 100) {
+                    Snackbar.make(findViewById(R.id.stock_list), "Weights do not add up to 100.", Snackbar.LENGTH_LONG).show();
+                }
+                else {
+                    // TODO: PASS RATING TO NEXT ACTIVITY
+                    Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+}

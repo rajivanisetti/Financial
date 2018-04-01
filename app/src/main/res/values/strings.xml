@@ -12,4 +12,5 @@
     <string name="sign_up">Sign Up</string>
     <string name="already_account">Already have an account? Sign In</string>
     <string name="Subheader_homepage">Stocks</string>
+    <string name="title_activity_stock">StockActivity</string>
 </resources>

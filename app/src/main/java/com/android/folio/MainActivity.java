@@ -110,7 +110,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         if (currentUser != null) {
             finish();
-            startActivity(new Intent(this, HomePageActivity.class));
+            startActivity(new Intent(this, StockActivity.class));
         }
     }
 
