@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,29 +65,31 @@ public class MainActivity extends Activity implements View.OnClickListener{
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             final int bool = Integer.parseInt(dataSnapshot.getValue().toString());
+                            try {
+                                db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot ds) {
+                                        final ArrayList<String> tickers = new ArrayList<>();
+                                        final ArrayList<Integer> weights = new ArrayList<>();
 
-                            db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot ds) {
-                                    final ArrayList<String> tickers = new ArrayList<>();
-                                    final ArrayList<Integer> weights = new ArrayList<>();
+                                        for (DataSnapshot stocks : ds.getChildren()) {
+                                            tickers.add(stocks.getKey());
+                                            weights.add(Integer.parseInt(stocks.getValue().toString()));
+                                        }
 
-                                    for(DataSnapshot stocks : ds.getChildren()) {
-                                        tickers.add(stocks.getKey());
-                                        weights.add(Integer.parseInt(stocks.getValue().toString()));
+                                        final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
+                                        intent.putExtra("stockArray", tickers);
+                                        intent.putExtra("weightArray", weights);
+                                        updateUI(user, bool, intent);
                                     }
 
-                                    final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
-                                    intent.putExtra("stockArray", tickers);
-                                    intent.putExtra("weightArray", weights);
-                                    updateUI(user, bool,intent);
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
-                            });
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                            } catch(Exception e) {
+                                Log.d("MAIN ACTIVITY", "Failure");
+                            }
                         }
 
                         @Override
@@ -157,29 +160,31 @@ public class MainActivity extends Activity implements View.OnClickListener{
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     final int bool = Integer.parseInt(dataSnapshot.getValue().toString());
+                                    try {
+                                        db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot ds) {
+                                                final ArrayList<String> tickers = new ArrayList<>();
+                                                final ArrayList<Integer> weights = new ArrayList<>();
 
-                                    db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot ds) {
-                                            final ArrayList<String> tickers = new ArrayList<>();
-                                            final ArrayList<Integer> weights = new ArrayList<>();
+                                                for (DataSnapshot stocks : ds.getChildren()) {
+                                                    tickers.add(stocks.getKey());
+                                                    weights.add(Integer.parseInt(stocks.getValue().toString()));
+                                                }
 
-                                            for(DataSnapshot stocks : ds.getChildren()) {
-                                                tickers.add(stocks.getKey());
-                                                weights.add(Integer.parseInt(stocks.getValue().toString()));
+                                                final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
+                                                intent.putExtra("stockArray", tickers);
+                                                intent.putExtra("weightArray", weights);
+                                                updateUI(user, bool, intent);
                                             }
 
-                                            final Intent intent = new Intent(getBaseContext(), HomePageActivity.class);
-                                            intent.putExtra("stockArray", tickers);
-                                            intent.putExtra("weightArray", weights);
-                                            updateUI(user, bool,intent);
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-                                        }
-                                    });
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+                                            }
+                                        });
+                                    } catch(Exception e) {
+                                        Log.d("MAIN ACTIVITY", "Failure");
+                                    }
                                 }
 
                                 @Override
