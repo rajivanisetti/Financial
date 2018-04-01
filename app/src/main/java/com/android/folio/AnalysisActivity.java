@@ -121,7 +121,6 @@ public class AnalysisActivity extends AppCompatActivity {
                         for (Element e : words) {
                             // myBodies.add(i, e.text());
                             s = s.concat(e.text());
-
                         }
 
 
