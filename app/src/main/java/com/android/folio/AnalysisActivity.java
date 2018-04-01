@@ -64,6 +64,8 @@ public class AnalysisActivity extends AppCompatActivity {
     int read = 0;
     private String CLOUD_API_KEY = "AIzaSyBP_3jPRzVum-DnQqie68laZ3dWGgNaHow";
     ArrayList<String> myBodies = new ArrayList<String>();
+    ArrayList<String> articleNames = new ArrayList<String>();
+    ArrayList<String> urls = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,13 +104,18 @@ public class AnalysisActivity extends AppCompatActivity {
                 for (int i = 0; i < n; i++) {
                     //Log.e("I", "I: " + Integer.toString(i));
                     String newUrl = links.get(i).select("a[href]").attr("abs:href");
-                    Log.e("link", newUrl);
                     try {
                         org.jsoup.nodes.Document newDoc = Jsoup.connect(newUrl).userAgent("Mozilla").ignoreHttpErrors(true).get();
 
 
                         Elements words = newDoc.select("h1, h2, h3, h4, h5, h6");
+                        String articleName = links.get(i).text();
+                        Log.e("URL", myUrl);
+                        Log.e("Article Name", articleName);
                         String s = "";
+                        urls.add(myUrl);
+                        articleNames.add(articleName);
+
 
 
                         for (Element e : words) {
