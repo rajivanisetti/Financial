@@ -12,6 +12,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.services.language.v1beta2.CloudNaturalLanguage;
@@ -24,6 +30,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,9 +60,8 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
 
             // Layout Setup
             setContentView(R.layout.activity_home_page);
-
+            initChart();
             //Add ActionListeners
-            findViewById(R.id.analyze_button).setOnClickListener(this);
             findViewById(R.id.buttonSignOut).setOnClickListener(this);
 
             AsyncTaskRunner runner = new AsyncTaskRunner();
@@ -73,63 +80,27 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
                     mAuth.getInstance().signOut();
                     startActivity(new Intent(this, MainActivity.class));
                     break;
-
-                case R.id.analyze_button:
-                    analyzeText("Hello World");
-
             }
         }
 
-        public void analyzeText(String transcript) {
-            final CloudNaturalLanguage naturalLanguageService =
-                    new CloudNaturalLanguage.Builder(
-                            AndroidHttp.newCompatibleTransport(),
-                            new AndroidJsonFactory(),
-                            null
-                    ).setCloudNaturalLanguageRequestInitializer(
-                            new CloudNaturalLanguageRequestInitializer(CLOUD_API_KEY)
-                    ).build();
+        public void initChart() {
+            float rainfall[] = {98.8f, 123.8f, 162.6f, 24.3f};
+            String monthName[] = {"Jan", "Feb", "Mar", "Apr"};
 
-            Document document = new Document();
-            document.setType("PLAIN_TEXT");
-            document.setLanguage("en-US");
-            document.setContent(transcript);
+            List<PieEntry> pieEntries = new ArrayList<>();
+            for (int i = 0; i < rainfall.length; i++) {
+                pieEntries.add(new PieEntry(rainfall[i], monthName[i]));
+            }
 
-            Features features = new Features();
-            features.setExtractDocumentSentiment(true);
+            PieDataSet dataSet = new PieDataSet(pieEntries, "Rainfall for Vancouver");
+            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+            PieData data = new PieData(dataSet);
 
-            final AnnotateTextRequest request = new AnnotateTextRequest();
-            request.setDocument(document);
-            request.setFeatures(features);
-
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    AnnotateTextResponse response =
-                            null;
-                    try {
-                        response = naturalLanguageService.documents()
-                                .annotateText(request).execute();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    final float sentiment =((response.getDocumentSentiment().getScore())+1)*5;
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            AlertDialog dialog =
-                                    new AlertDialog.Builder(HomePageActivity.this)
-                                            .setTitle("Sentiment: " + sentiment)
-                                            .setNeutralButton("Okay", null)
-                                            .create();
-                            dialog.show();
-                        }
-                    });
-                }
-            });
+            // Get the chart;
+            PieChart chart = (PieChart) findViewById(R.id.pieChart);
+            chart.setData(data);
+            chart.animateY(3000, Easing.EasingOption.EaseOutBack);
+            chart.invalidate();
         }
 
     static class AsyncTaskRunner extends AsyncTask <Void, Void, String> {
