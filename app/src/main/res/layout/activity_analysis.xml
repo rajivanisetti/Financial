@@ -19,11 +19,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+    
 
-    <include
-        layout="@layout/content_analysis"
-        android:layout_width="380dp"
-        tools:layout_editor_absoluteX="4dp" />
-
-
+    <include layout="@layout/content_analysis" />
 </android.support.design.widget.CoordinatorLayout>
