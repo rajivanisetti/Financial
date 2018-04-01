@@ -63,7 +63,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            final int bool = Integer.parseInt(dataSnapshot.getValue().toString();
+                            final int bool = Integer.parseInt(dataSnapshot.getValue().toString());
 
                             db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
                                 @Override
