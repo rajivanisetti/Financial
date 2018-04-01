@@ -27,23 +27,32 @@
             table:tableView_columnCount="2"
             android:textColor="@color/text" />
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Selected stocks:"
-            android:textSize="16sp"
-            android:textColor="@color/text"/>
+            android:background="@color/BLACKS_lightGray"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:layout_marginBottom="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Selected stocks:"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/BLACKS_black"/>
+        </LinearLayout>
 
         <ListView
             android:id="@+id/stock_list"
             android:layout_width="wrap_content"
             android:layout_height="350dp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginBottom="10dp" />
 
         <Button
             android:id="@+id/buttonSignOut"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:text="Sign out"

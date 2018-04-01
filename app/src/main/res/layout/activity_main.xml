@@ -37,7 +37,7 @@
                     android:layout_height="100dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="70sp"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:src="@mipmap/ic_launcher" />
 
                 <EditText
                     android:id="@+id/editTextEmail"
