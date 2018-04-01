@@ -12,6 +12,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import android.view.View;
 
 import android.app.ProgressDialog;
@@ -28,6 +34,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private Button buttonSignIn;
     private TextView textViewSignUp, textViewForgotPassword;
     private ProgressDialog progressDialog;
+    private DatabaseReference db;
 
     // APIs
     private FirebaseAuth mAuth;
@@ -41,8 +48,22 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         // Check if User is Authenticated
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currUser = mAuth.getCurrentUser();
-        updateUI(currUser);
+        final FirebaseUser currUser = mAuth.getCurrentUser();
+        db = FirebaseDatabase.getInstance().getReference();
+
+        if(currUser != null) {
+            db.child("users").child(currUser.getUid()).child("isVirgin").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    updateUI(currUser, Integer.parseInt(dataSnapshot.getValue().toString()));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    updateUI(null, 1);
+                }
+            });
+        }
 
         // Layout Setup
         setContentView(R.layout.activity_main);
@@ -93,24 +114,36 @@ public class MainActivity extends Activity implements View.OnClickListener{
                         progressDialog.dismiss();
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            db.child("users").child(user.getUid()).child("isVirgin").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                        updateUI(user, Integer.parseInt(dataSnapshot.getValue().toString()));
+                                }
 
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            updateUI(null, 1);
                         }
                     }
                 });
     }
 
-    private void updateUI(FirebaseUser currentUser) {
+    private void updateUI(FirebaseUser currentUser, int isVirgin) {
 
         if (currentUser != null) {
             finish();
-            startActivity(new Intent(this, StockActivity.class));
+            if(isVirgin == 1) {
+                startActivity(new Intent(this, StockActivity.class));
+            } else {
+                startActivity(new Intent(this, HomePageActivity.class));
+            }
         }
     }
 

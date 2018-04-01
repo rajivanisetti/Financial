@@ -28,6 +28,11 @@ import com.google.api.services.language.v1beta2.model.Document;
 import com.google.api.services.language.v1beta2.model.Features;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +46,7 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
         // Declare Variables
         //==============================================================================================
         private FirebaseAuth mAuth;
-        private String CLOUD_API_KEY = "AIzaSyBP_3jPRzVum-DnQqie68laZ3dWGgNaHow";
+        private DatabaseReference db;
 
         //==============================================================================================
         // On Create Setup
@@ -53,6 +58,8 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
 
             // Check if User is Authenticated
             mAuth = FirebaseAuth.getInstance();
+            db = FirebaseDatabase.getInstance().getReference();
+
             if(mAuth.getCurrentUser() == null) {
                 finish();
                 startActivity(new Intent(this, MainActivity.class));
@@ -61,6 +68,7 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
             // Layout Setup
             setContentView(R.layout.activity_home_page);
             initChart();
+
             //Add ActionListeners
             findViewById(R.id.buttonSignOut).setOnClickListener(this);
 
@@ -84,23 +92,38 @@ public class HomePageActivity extends AppCompatActivity implements View.OnClickL
         }
 
         public void initChart() {
-            float rainfall[] = {98.8f, 123.8f, 162.6f, 24.3f};
-            String monthName[] = {"Jan", "Feb", "Mar", "Apr"};
+            final FirebaseUser user = mAuth.getCurrentUser();
 
-            List<PieEntry> pieEntries = new ArrayList<>();
-            for (int i = 0; i < rainfall.length; i++) {
-                pieEntries.add(new PieEntry(rainfall[i], monthName[i]));
-            }
+            db.child("users").child(user.getUid()).child("stocks").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
 
-            PieDataSet dataSet = new PieDataSet(pieEntries, "Rainfall for Vancouver");
-            dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-            PieData data = new PieData(dataSet);
+                        List<PieEntry> pieEntries = new ArrayList<>();
 
-            // Get the chart;
-            PieChart chart = (PieChart) findViewById(R.id.pieChart);
-            chart.setData(data);
-            chart.animateY(3000, Easing.EasingOption.EaseOutBack);
-            chart.invalidate();
+                        for(DataSnapshot stocks : dataSnapshot.getChildren()) {
+                            pieEntries.add(new PieEntry(Integer.parseInt(stocks.getValue().toString()), stocks.getKey().toString()));
+                        }
+
+                        PieDataSet dataSet = new PieDataSet(pieEntries, "Allocations");
+                        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                        PieData data = new PieData(dataSet);
+
+                        // Get the chart;
+                        PieChart chart = (PieChart) findViewById(R.id.pieChart);
+                        chart.setData(data);
+                        chart.animateY(3000, Easing.EasingOption.EaseOutBack);
+                        chart.invalidate();
+                    } else {
+                        System.out.println("USER HAS NO STOCKS");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("PULLING STOCKS FAILED");
+                }
+                });
         }
 
     static class AsyncTaskRunner extends AsyncTask <Void, Void, String> {

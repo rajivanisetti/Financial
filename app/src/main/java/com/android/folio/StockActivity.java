@@ -17,14 +17,35 @@ import android.widget.SeekBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 public class StockActivity extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
+    private DatabaseReference db;
+    private FirebaseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Check if User is Authenticated
+        mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser() == null) {
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+        }
+
+        db = FirebaseDatabase.getInstance().getReference();
+        user = mAuth.getCurrentUser();
+
         setContentView(R.layout.activity_stock);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -63,11 +84,14 @@ public class StockActivity extends AppCompatActivity {
 
                 adapter.notifyDataSetChanged();
 
+                db.child("users").child(user.getUid()).child("stocks")
+                        .child(stockName.getText().toString())
+                        .setValue(Integer.parseInt(stockWeight.getText().toString()));
+
+                db.child("users").child(user.getUid()).child("isVirgin").setValue(0);
+
                 stockName.setText("");
                 stockWeight.setText("");
-
-                // TODO: UPLOAD TO FIREBASE HERE
-
             }
         });
 
