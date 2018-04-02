@@ -1,4 +1,4 @@
-## Created at LA Hacks 2018
+## Awarded Best Use of Google Cloud Platform or Firebase, LA Hacks 2018
 
 # fol.io
 
