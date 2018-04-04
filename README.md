@@ -5,7 +5,7 @@
 Many are afraid to begin investing or just don't know where to start. folio takes away that fear by providing real time advice and data on stocks.
 
 ## What it does
-folio provides financial analysis and advice based on the stocks you want to invest in, your risk tolerance, and other factors. For each stock, you're interested in investing we provide advice on whether it is a good time to invest, buy, or sell based off numerous factors we have compiled. Factors include sentient analysis by scouring the web for any news over the respective company, market trends, and risk tolerance.
+folio provides financial analysis and advice based on the stocks you want to invest in, your risk tolerance, and other factors. For each stock you're interested in, we provide advice on whether it is a good time to invest, buy, or sell based off numerous factors we have compiled. Factors include sentiment analysis of data acquired by scouring the web and Twitter, market trends, and risk tolerance.
 
 ## Features
 * Log in and securely store your stock data in our online database
