@@ -1,11 +1,11 @@
 ## Awarded Best Use of Google Cloud Platform or Firebase, LA Hacks 2018
 
-# fol.io
+# folio
 
-Many are afraid to begin investing or just don't know where to start. fol.io takes away that fear by providing real time advice and data on stocks.
+Many are afraid to begin investing or just don't know where to start. folio takes away that fear by providing real time advice and data on stocks.
 
 ## What it does
-fol.io provides financial analysis and advice based on the stocks you want to invest in, your risk tolerance, and other factors. For each stock, you're interested in investing we provide advice on whether it is a good time to invest, buy, or sell based off numerous factors we have compiled. Factors include sentient analysis by scouring the web for any news over the respective company, market trends, and risk tolerance.
+folio provides financial analysis and advice based on the stocks you want to invest in, your risk tolerance, and other factors. For each stock, you're interested in investing we provide advice on whether it is a good time to invest, buy, or sell based off numerous factors we have compiled. Factors include sentient analysis by scouring the web for any news over the respective company, market trends, and risk tolerance.
 
 ## Features
 * Log in and securely store your stock data in our online database
